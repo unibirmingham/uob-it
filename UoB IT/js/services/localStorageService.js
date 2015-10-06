@@ -15,42 +15,44 @@ app.registerInitialise(function () {
              console.log("websql supported");
          }
 
-         var getItem = function (cacheName) {
-
+         var getItem = Promise.method(function (cacheName) {
+             // console.log("in getItem: " + cacheName);
+             return new Promise(function(resolve, reject) {
                  db.get(cacheName).then(function(returnedItem) {
-                     console.log("in db.get (" + cacheName + ")");
-                     console.log(returnedItem);
-                     return returnedItem;
-                 }).catch(function (error) {
-                     console.log("getItem error: " + error);
-                     return null;
+
+                     resolve(returnedItem);
+                 }).catch(function(error) {
+                     reject(error);
                  });
+             });
 
-         };
+         });
 
-         var storeOrUpdate = function (cacheName, item) {
+         var storeOrUpdate = Promise.method(function (cacheName, item) {
 
             if (item._id == undefined)
                 item._id = cacheName;
 
+           //  console.log(item);
 
-            db.put(item).catch(function (error) {
-
-                if (error.status == 409) {
-                    db.get(item._id).then(function (doc) {
-                        return db.put(doc);
-                    }).then(function () {
-                        return db.get(item._id);
-                    }).catch(function (error) {
-                        console.log("setItem error: " + error);
-                    });
-                } else {
-                    console.log("in StoreOrUpdate.db.put.error");
-                    console.log(item);
-                    console.log(error);
-                }
-            });
-        };
+             return new Promise(function(resolve, reject) {
+                 db.put(item).catch(function(error) {
+                     
+                     if (error.status == 409) {
+                         db.get(item._id).then(function (doc) {
+                             doc.data = item.data;
+                             return db.put(doc);
+                         }).then(function() {
+                             resolve(db.get(item._id));
+                         }).catch(function(error) {
+                             reject(error);
+                         });
+                     } else {
+                         reject(error);
+                     }
+                 });
+             });
+         });
 
          var setItem = function (cacheName, item) {
 

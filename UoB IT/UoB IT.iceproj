@@ -28,7 +28,11 @@
     <Content Include="cordova.android.js" />
     <Content Include="cordova.ios.js" />
     <Content Include="cordova.wp8.js" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="index.html" />
+    <Content Include="js\plugins\blurbird.js" />
     <Content Include="js\services\locationRepository.js" />
     <Content Include="js\views\leafletMap.js" />
     <Content Include="js\plugins\leaflet-routing-machine.js" />
@@ -38,6 +42,7 @@
     <Content Include="js\plugins\lrm-valhalla.js" />
     <Content Include="js\plugins\pouchdb-4.0.3.min.js" />
     <Content Include="js\services\localStorageService.js" />
+    <Content Include="js\views\map.js" />
     <Content Include="js\views\settings.js" />
     <Content Include="js\views\home.js" />
     <Content Include="kendo\js\jquery.min.js" />
@@ -153,6 +158,7 @@
     <Folder Include="App_Resources\WP8\Tiles\" />
     <Folder Include="App_Resources\WP8\Tiles\Iconic\" />
     <Folder Include="css\" />
+    <Folder Include="fonts\" />
     <Folder Include="img\" />
     <Folder Include="js\" />
     <Folder Include="js\core\" />

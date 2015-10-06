@@ -13,10 +13,10 @@ models.settings = kendo.observable({
         //  }).each(function() {
         // 	if(this.complete) $(this).load();
         // 
-        var item = LocalStorageService.GetItem("dfsfddddsdfs");
+    //    var item = LocalStorageService.GetItem("dfsfddddsdfs");
 
-        var pcs = LocationRepository.GetAllPCs();
-        console.log(pcs);
+      //  var pcs = LocationRepository.GetAllPCs();
+       // console.log(pcs);
     },
     title: "asdsad"
 });

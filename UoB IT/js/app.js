@@ -20,11 +20,10 @@ var models = {};
 
 var app = {
 
-
     // Application Constructor
     initialize: function () {
         this.bindEvents();
-        
+
     },
     // Bind Event Listeners
     //
@@ -36,16 +35,29 @@ var app = {
         document.addEventListener('offline', this.onDeviceOffline, false);
         document.addEventListener('online', this.onDeviceOnline, false);
     },
-    registerPush: function() {
+    registerPush: function () {
         app.receivedEvent('registeredPush');
     },
-    registerInitialise: function(callback) {
+    registerInitialise: function (callback) {
         if (!app.registerInitialiseCB)
             app.registerInitialiseCB = [];
 
-        
-
         app.registerInitialiseCB.push(callback);
+    },
+    registerPostInitialise: function (callback) {
+        if (!app.registerPostInitialiseCB)
+            app.registerPostInitialiseCB = [];
+
+        app.registerPostInitialiseCB.push(callback);
+    },
+    registerTimedWatcher: function (item) {
+        //format of item: {every: <value in minutes>, then: function () {//a callback function; } }
+        if (!app.registeredTimedObjects)
+            app.registeredTimedObjects = [];
+
+        item.updateWhen = moment().add(item.every, 'minutes').format("hh:mm:ss");
+
+        app.registeredTimedObjects.push(item);
     },
     // deviceready Event Handler
     //
@@ -61,13 +73,13 @@ var app = {
             skin: 'flat',
             // the application needs to know which view to load first
             initial: initialView,
-            statusBarStyle: "black",
-            transition: 'slide'
+            statusBarStyle: "black"
         });
 
         navigator.splashscreen.hide();
 
         if (app.registerInitialiseCB) {
+            app.receivedEvent('registerInitialise');
             var length = app.registerInitialiseCB.length - 1;
 
             do {
@@ -75,17 +87,54 @@ var app = {
             } while (length--);
         }
 
-     //   app.registerPush();
+        if (app.registerPostInitialiseCB) {
+            app.receivedEvent('registerPostInitialise');
+            var length = app.registerPostInitialiseCB.length - 1;
+
+            do {
+                app.registerPostInitialiseCB[length]();
+            } while (length--);
+        }
+/*
+        LocationRepository.GetLocation(function(results) {
+            console.log(results);
+        });
+        */
+        //   app.registerPush();
     },
-    onDeviceOffline: function() {
-      //  alert("offline!!");
+    onViewChange: function(e) {
+        app.receivedEvent('onViewChange');
+
+        if (app.registeredTimedObjects) {
+            var currentTime = moment().format("hh:mm:ss");
+
+            var counter = app.registeredTimedObjects.length - 1;
+
+            do {
+                var item = app.registeredTimedObjects[counter];
+
+                if (currentTime >= item.updateWhen) {
+                    item.then();
+
+                    item.updateWhen = moment().add(item.every, 'minutes').format("hh:mm:ss");
+
+                    app.registeredTimedObjects[counter] = item;
+                }
+            } while (counter--);
+
+        };
+
+      //  console.log(moment().add(5, 'minutes').format("hh:mm:ss"));
+    },
+    onDeviceOffline: function () {
+        //  alert("offline!!");
     },
     onDeviceOnline: function () {
-      //  alert("online!!");
+        //  alert("online!!");
     },
-   /* pushReceivedEvent: function(item) {
-        app.receivedEvent('pushEventReceived');
-    },*/
+    /* pushReceivedEvent: function(item) {
+         app.receivedEvent('pushEventReceived');
+     },*/
     // Update DOM on a Received Event
     receivedEvent: function (id) {
         /* var parentElement = document.getElementById(id);
@@ -97,4 +146,8 @@ var app = {
 
         console.log('Received Event: ' + id);
     }
+
+
+
+
 };

@@ -1,4 +1,4 @@
-<style>
+<!--<style>
     #map {
         position: absolute;
         width: 100%;
@@ -6,7 +6,28 @@
     }
 </style>
 
-
-<div data-role="view" data-title="Map" data-layout="main" data-model="models.leafletMap" data-show="models.leafletMap.onShow" data-stretch="true">
+<div data-role="view" data-title="Map" data-layout="map-view" data-model="models.leafletMap" data-show="models.leafletMap.onShow" data-stretch="true">
     <div id="map"></div>
+
+</div>-->
+
+
+<div data-role="view" data-title="Map View" data-layout="main" data-model="models.leafletMap" data-init="models.leafletMap.onInit" data-show="models.leafletMap.onShow" data-stretch="true" data-reload="true">
+    <div id="map"></div>
+    <!--
+    <div id="map-drawer-container" style="position: absolute; left:0; bottom: -80px;">
+        <div id="map-drawer">
+            <div data-click="window.Maps.toggleOptions" data-role="button" id="drawer-toggle">
+                <img src="images/maps/details-arrow.png" alt="" />
+            </div>
+            <div>
+                Bike Storage/Lockers
+                <input type="checkbox" data-role="switch" data-bind="checked: showingBikes" data-change="app.mapView.toggleBikes" />
+            </div>
+            <div>
+                Recycling Locations
+                <input type="checkbox" data-role="switch" data-bind="checked: showingRecycling" data-change="app.mapView.toggleRecycling" />
+            </div>
+        </div>
+    </div>-->
 </div>

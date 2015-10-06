@@ -12,13 +12,15 @@
     <link href="styles/leaflet.ie.css" rel="stylesheet" />
     <link href="styles/leaflet-routing-machine.css" rel="stylesheet" />
     <link href="styles/MarkerCluster.css" rel="stylesheet" />
-    <link href="styles/main.css" rel="stylesheet" />
+    <link href="styles/main.css" rel="stylesheet"/>
+
+    <script src="js/plugins/moment.min.js"></script>
 
     <script src="cordova.js"></script>
     <script src="kendo/js/jquery.min.js"></script>
     <script src="kendo/js/kendo.mobile.min.js"></script>
 
-
+    <script src="js/plugins/blurbird.js"></script>
     <script src="js/app.js"></script>
     <script src="js/plugins/pouchdb-4.0.3.min.js"></script>
     <script src="js/services/localStorageService.js"></script>
@@ -26,27 +28,39 @@
 </head>
 <body>
 
-    <div data-role="layout" data-id="main">
-        <div data-role="header">
+    <div data-role="layout" data-id="main" data-show="app.onViewChange">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+                <a data-role="button" href="#appDrawer" data-rel="drawer" data-align="left" data-icon="burger"></a>
+            </div>
+        </header>
+
+        <!-- application views will be rendered here -->
+    </div>
+
+    <div id="appDrawer" data-role="drawer" data-title="Navigation" data-swipe-to-open="false"  data-show="app.onViewChange">
+        <header data-role="header">
             <div data-role="navbar">
                 <span data-role="view-title"></span>
             </div>
-        </div>
-
-        <!-- application views will be rendered here -->
-
-        <div data-role="footer">
-            <div data-role="tabstrip">
+        </header>
+        <ul id="navigation-container" data-role="listview">
+            <li>
                 <a href="views/home.html" data-icon="home">Home</a>
+            </li>
+            <li>
                 <a href="views/pcAvailabilityLeafletMap.html" data-icon="contacts">Contacts</a>
+            </li>
+            <li>
                 <a href="views/settings.html" data-icon="settings">Settings</a>
-                <a href="views/contacts.html" data-icon="contacts">Contacts</a>
-            </div>
-        </div>
+            </li>
+        </ul>
     </div>
-    <script type="text/javascript">
-            app.initialize();
-    </script>
+
+<script type="text/javascript">
+    app.initialize();
+</script>
     <script src="js/views/home.js"></script>
     <script src="js/views/settings.js"></script>
     <script src="js/views/leafletMap.js"></script>

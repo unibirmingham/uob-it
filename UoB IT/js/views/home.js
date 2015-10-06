@@ -1,7 +1,7 @@
 'use strict';
 
-app.registerInitialise(function() {
-
+app.registerPostInitialise(function() {
+    LocationRepository.RefreshData(LocationRepository.CacheKeys.AllPCs);
 });
 
 models.home = kendo.observable({
@@ -15,8 +15,9 @@ models.home = kendo.observable({
         //  }).each(function() {
         // 	if(this.complete) $(this).load();
         // });
-        var obj = { stuff: "dfsfdsdfsdfsdsf" }
-        LocalStorageService.StoreOrUpdate("dfsfddddsdfs", obj);
+   //     var obj = { stuff: "dfsfdsdfsdfsdsf" }
+     //   LocalStorageService.StoreOrUpdate("dfsfddddsdfs", obj);
     },
     title: "gggg"
 });
+
