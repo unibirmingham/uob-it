@@ -33,6 +33,7 @@
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="index.html" />
     <Content Include="js\plugins\blurbird.js" />
+    <Content Include="js\plugins\moment.min.js" />
     <Content Include="js\services\locationRepository.js" />
     <Content Include="js\views\leafletMap.js" />
     <Content Include="js\plugins\leaflet-routing-machine.js" />

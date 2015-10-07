@@ -35,17 +35,21 @@ app.registerInitialise(function () {
             return LocalStorageService.GetItem(key).then(function (storedData) {
               //  console.log("return LocalStorageService.GetItem(key).");
               //  console.log(storedData);
-              //  var ignoreLocal = forceRefreshKeys[key] == undefined ? false : forceRefreshKeys[key];
+                var ignoreLocal = forceRefreshKeys[key] == undefined ? false : forceRefreshKeys[key];
 
-              //  if (forceRefreshKeys[key])
-                 //   forceRefreshKeys[key] = false;
+                if (forceRefreshKeys[key])
+                   forceRefreshKeys[key] = false;
 
                 
 
                 return new Promise(function(resolve, reject) {
-                    if (storedData != null) {
+                    if (storedData != null && !ignoreLocal) {
                         resolve(storedData.data);
                     } else {
+
+                        if (ignoreLocal)
+                            ignoreLocal = false;
+
                         getDataRemote(url).then(function(data) {
 
                             LocalStorageService.StoreOrUpdate(key, { data }).then(function(results) {
@@ -56,6 +60,8 @@ app.registerInitialise(function () {
                         });
                     };
                 }); 
+            }).catch(function(error) {
+                console.log(error);
             });
 
 

@@ -60,25 +60,21 @@ models.leafletMap = kendo.observable({
 
         LocationRepository.GetLocation().then(function (location) {
             
-            var location = centralCampus;
+           // location = centralCampus;
             var spinIcon;
 
             if (location && location.coords) {
                 //found location, add to map
-                spinIcon = L.AwesomeMarkers.icon({ icon: 'male', prefix: 'fa', markerColor: 'blue', spin: true });
+                spinIcon = L.AwesomeMarkers.icon({ icon: 'male', prefix: 'fa', markerColor: 'green'});
                 console.log(location.coords);
                 L.marker([location.coords.latitude, location.coords.longitude], { icon: spinIcon }).addTo(map);
             } else {
                 //couldn't get location, use central campus - perhaps a different icon?
-                spinIcon = L.AwesomeMarkers.icon({ icon: 'male', prefix: 'fa', markerColor: 'blue', spin: true });
-                console.log(location.coords);
+                spinIcon = L.AwesomeMarkers.icon({ icon: 'male', prefix: 'fa', markerColor: 'red'});
+
                 L.marker(centralCampus, { icon: spinIcon }).addTo(map);
             };
         });
-
-
-
-
 
         var extraMarkers = L.markerClusterGroup({
 
@@ -86,28 +82,27 @@ models.leafletMap = kendo.observable({
             spiderfyDistanceMultiplier: 2
 
         });
-
-
         populateMap();
-
-
-        //L.control.layers({ "nearest Pcs": nearestPcsLayer }).addTo(map);
-
     },
     onShow: function () {
-    //    console.log("in onShow");
-     //   console.log(nearestPcsObjects);
-
-
     },
     title: "Map"
 });
 
-var populateMap = function() {
+var populateMap = function () {
+
+    var favorites;
+    
+    UserRepository.GetAllFavorites().then(function(results) {
+        favorites = results;
+    });
+
+    console.log(favorites);
+
     LocationRepository.GetAllPCs().then(function(results) {
 
         console.log("results");
-        console.log(results);
+
 
         nearestPcsObjects = results;
 
@@ -170,20 +165,45 @@ var populateMap = function() {
             } while (arraySize--)
 
             nearestPcsLayer = new L.LayerGroup();
-            //   var otherItemsLayer = new L.LayerGroup();
-
 
             markers.addLayers(markStore);
 
             nearestPcsLayer.addLayer(markers).addTo(map);
-            //  L.control.layers({ "nearest Pcs": nearestPcsLayer }).addTo(map);
         };
-
-        // console.log("registerPostInitialise success");
 
     }).catch(function(error) {
         console.log(error);
     });
 };
 
-app.registerTimedWatcher({ every: 1, then: function () { console.log("did something"); } })
+var routeControl;
+
+
+var getDirections = function (originLng, originLat, destinationLng, destinationLat) {
+
+    if (routeControl)
+        map.removeControl(routeControl);
+
+
+    routeControl = L.Routing.control({
+        waypoints: [
+            L.latLng(originLng, originLat),
+            L.latLng(destinationLng, destinationLat)
+        ],
+        router: L.Routing.valhalla('valhalla-rRUHtYw', 'pedestrian' /*, { pedestrian: { step_penalty: 10, alley_factor: 0.1, driveway_factor:10 } }*/),
+        formatter: new L.Routing.Valhalla.Formatter({ units: 'imperial' }),
+        routeWhileDragging: false,
+        autoRoute: true
+    }).addTo(map);
+}
+
+var addFavorite = function() {
+
+};
+
+var removeFavorite = function()
+{
+    
+};
+
+app.registerTimedWatcher({ every: 5, then: function () { LocationRepository.RefreshData(LocationRepository.CacheKeys.AllPCs); } })
