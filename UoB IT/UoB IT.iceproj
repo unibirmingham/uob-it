@@ -28,13 +28,17 @@
     <Content Include="cordova.android.js" />
     <Content Include="cordova.ios.js" />
     <Content Include="cordova.wp8.js" />
+    <Content Include="data\Settings.json" />
+    <Content Include="data\PcClusters.json" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="index.html" />
     <Content Include="js\plugins\blurbird.js" />
     <Content Include="js\plugins\moment.min.js" />
+    <Content Include="js\plugins\pouchdb.localstorage.min.js" />
     <Content Include="js\services\locationRepository.js" />
+    <Content Include="js\services\userRepository.js" />
     <Content Include="js\views\leafletMap.js" />
     <Content Include="js\plugins\leaflet-routing-machine.js" />
     <Content Include="js\plugins\leaflet.awesome-markers.js" />
@@ -171,6 +175,7 @@
     <Folder Include="kendo\styles\" />
     <Folder Include="kendo\styles\images\" />
     <Folder Include="kendo\typescript\" />
+    <Folder Include="data\" />
     <Folder Include="styles\" />
     <Folder Include="styles\images\" />
     <Folder Include="views\" />

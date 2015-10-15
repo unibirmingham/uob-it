@@ -1,0 +1,5 @@
+//Default app settings
+
+{
+  "MapRefreshMinutes":  5
+}

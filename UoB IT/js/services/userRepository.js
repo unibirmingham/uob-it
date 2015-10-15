@@ -1,20 +1,53 @@
+/*
+    User repository.
+    All user based operationsoperations should go here e.g. favprites, settings etc
+ */
+
 var UserRepository;
 
 app.registerInitialise(function() {
     UserRepository = (function() {
-        var cacheKeys = { FavoriteRooms: "%USER_REPOSITORY_FAVORITE_ROOMS" };
+        var cacheKeys = { FavoriteRooms: "%USER_REPOSITORY_FAVORITE_ROOMS", Settings: "%USER_REPOSITORY_APP_SETTINGS" };
 
-        var removeFavorite = function() {
-
+        var removeFavorite = function(item) {
+        //    LocalStorageService.
         };
 
-        var addFavorite = function() {
+        var addFavorite = Promise.method(function (item) {
+            return new Promise(function(resolve, reject) {
+                return LocalStorageService.StoreItem(item.BuildingId + "_" + item.RoomId, item).then(function(result) {
+                    resolve(result);
+                }).catch(function (error) {
+                    reject(error);
+                });
+            });
+        });
 
-        };
+        var getAllFavorites = Promise.method(function () {
+            return new Promise(function(resolve, reject) {
+                return LocalStorageService.GetItem(cacheKeys.FavoriteRooms).then(function (item) {
+                    resolve(item);
+                }).catch(function(error) {
+                    reject(error);
+                });
+            });
+        });
 
-        var getAllFavorites = Promise.method(function() {
-            return LocalStorageService.GetItem(cacheKeys.FavoriteRooms).catch(function (error) {
-                console.log(error);
+        var getSettings = Promise.method(function () {
+            return new Promise(function(resolve, reject) {
+                return LocalStorageService.GetItem(cacheKeys.Settings).then(function(item) {
+                    resolve(item);
+                }).catch(function (error) {
+                    reject(error);
+                });
+            });
+        });
+
+        var saveSettings = Promise.method(function(settings) {
+            return LocalStorageService.StoreOrUpdate(cacheKeys.Settings, settings).then(function (result) {
+                resolve(result);
+            }).catch(function (error) {
+                reject(error);
             });
         });
 
@@ -22,7 +55,9 @@ app.registerInitialise(function() {
             GetAllFavorites: getAllFavorites,
             AddFavorite: addFavorite,
             RemoveFavorite: removeFavorite,
-            CacheKeys: cacheKeys
+            CacheKeys: cacheKeys,
+            GetSettings: getSettings,
+            SaveSettings: saveSettings
         }
     })();
 });

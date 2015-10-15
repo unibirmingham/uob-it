@@ -1,48 +1,87 @@
+/*
+    Location repository.
+    All location based operations should go here e.g. fetch phone location, get pc locations etc
+ */
+
 var LocationRepository;
 
 app.registerInitialise(function () {
 
     LocationRepository = (function () {
 
+        //key array for cache items
         var cacheKeys = { AllPCs: "%LOCATION_REPOSITORY_GET_ALL_PCS" };
+
+        //default location coords which point to the center of campus
+        var coordCollection = { CentralCampus: [52.45049111433046, -1.9307774305343628] };
 
         var forceRefreshKeys = {};
 
+        //pc availibility service endpoint. perhaps push these things to config service?
         var pcsUrl = "http://www.birmingham.ac.uk/web_services/Clusters.svc/nearestpc";
 
+        //generates the service url for PC location based upon current or a default location
         var pcUrlCreator = function (coords) {
-            if (coords == undefined || coords.length != 1) {
-                console.log("invalid coords array passed into pcUrlCreator");
+            if (coords == null || coords.length != 1) {
+                console.log("invalid coords array passed into pcUrlCreator: " + coords);
                 coords = [52.45049111433046, -1.9307774305343628];
             }
 
             return pcsUrl + "?lat=" + coords[0] + "&long=" + coords[1];
         }
 
-
+        //fetched data from a remote source
         var getDataRemote = Promise.method(function (url) {
-            return new Promise(function(resolve, reject) {
-                $.getJSON(url, function(data) {
+            return new Promise(function (resolve, reject) {
+                $.getJSON(url, function (data) {
                     resolve(data);
-                }).error(function(jqXhr, textStatus, errorThrown) {
+                }).error(function (jqXhr, textStatus, errorThrown) {
                     reject({ jqXhr, textStatus, errorThrown });
                 });
             });
         });
 
-        var getData = Promise.method(function(url, key) {
-            
+      /*  var putPCsBulk = Promise.method(function (data) {
+
+            return new Promise(function (resolve, reject) {
+                if (data) {
+                    var length = data.length - 1;
+
+                    //add unique ids to the items
+                    do {
+                        var item = data[length];
+
+                        item._id = item.BuildingId + item.RoomId;
+                    } while (length--);
+
+                    return LocalStorageService.StoreItems(data).then(function (result) {
+                        resolve(result);
+                    }).catch(function (error) {
+                        reject(error);
+                    });
+
+                } else {
+                    reject("no data to add");
+                }
+            });
+
+        });*/
+
+        //Checks local storage for a copy of the desired data, if it doesnt
+        //exist, it'll pull it in from the passed in service url
+        //and put it to local storage using the defined key
+        var getData = Promise.method(function (url, key) {
+
             return LocalStorageService.GetItem(key).then(function (storedData) {
-              //  console.log("return LocalStorageService.GetItem(key).");
-              //  console.log(storedData);
+
                 var ignoreLocal = forceRefreshKeys[key] == undefined ? false : forceRefreshKeys[key];
 
                 if (forceRefreshKeys[key])
-                   forceRefreshKeys[key] = false;
+                    forceRefreshKeys[key] = false;
 
-                
 
-                return new Promise(function(resolve, reject) {
+
+                return new Promise(function (resolve, reject) {
                     if (storedData != null && !ignoreLocal) {
                         resolve(storedData.data);
                     } else {
@@ -50,64 +89,81 @@ app.registerInitialise(function () {
                         if (ignoreLocal)
                             ignoreLocal = false;
 
-                        getDataRemote(url).then(function(data) {
+                        return getDataRemote(url).then(function (data) {
 
-                            LocalStorageService.StoreOrUpdate(key, { data }).then(function(results) {
+
+                            LocalStorageService.StoreOrUpdate(key, { data }).then(function (results) {
                                 resolve(results.data);
-                            }).catch(function(error) {
+                            }).catch(function (error) {
                                 reject(error);
                             });
                         });
                     };
-                }); 
-            }).catch(function(error) {
-                console.log(error);
-            });
+                });
 
 
-        });
-
-        var getPhoneLocation = Promise.method(function() {
-            //var result;
-            return new Promise(function (resolve, reject) { // create a new promise
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function (position) { // send the callback to getCurrentPosition()
-                        resolve(position); // when the callback is invoked resolve using the result of showPosition()
-                    }, function (positionError) { // error callback
-                     
-                        reject(positionError); // reject using the PositionError from the callback
+            }).catch(function () {
+                return new Promise(function (resolve, reject) {
+                    return getDataRemote(url).then(function (data) {
+                        return LocalStorageService.StoreOrUpdate(key, { data }).then(function (results) {
+                            resolve(results);
+                        }).catch(function (error) {
+                            reject(error);
+                        });
                     });
-                } else {
-                    alert("Geolocation is not supported by this browser.");
-                    reject('not supported'); // if not supported reject
-                }
-            });
-        });
-
-
-        var getAllPCs = Promise.method(function() {
-
-            return new Promise(function (resolve, reject) {
-                getPhoneLocation().then(function (data) {
-
-                    resolve(getData(pcUrlCreator(data), cacheKeys.AllPCs));
-                }).catch(function(error) {
-                    reject(error);
                 });
             });
 
         });
 
-        var forceRefresh = function(key) {
+        //returns the phones current location
+        var getPhoneLocation = Promise.method(function () {
+
+            return new Promise(function (resolve, reject) { // create a new promise
+                if (navigator.geolocation) {
+                    return navigator.geolocation.getCurrentPosition(function (position) { // send the callback to getCurrentPosition()
+                        resolve(position); // when the callback is invoked resolve using the result of showPosition()
+                    }, function (positionError) { // error callback
+
+                        reject(positionError); // reject using the PositionError from the callback
+                    });
+                } else {
+                    reject('not supported'); // if not supported reject
+                }
+            });
+        });
+
+        //returns all PCs using the phones location to populate distance
+        var getAllPCs = Promise.method(function (location) {
+
+            return new Promise(function (resolve, reject) {
+                    // resolve(data)
+                return getData(pcUrlCreator(location), cacheKeys.AllPCs).then(function (result) {
+                        resolve(result);
+                    }).catch(function (error) {
+
+                        reject(error);
+                    });
+
+            });
+
+        });
+
+        //adds a key to the refresh array. On the next local storage request
+        //for the specified key, a remote fetch will occur, the results
+        //being pushed back to local storage
+        var forceRefresh = function (key) {
 
             forceRefreshKeys[key] = true;
         };
 
+        //accessors
         return {
             GetAllPCs: getAllPCs,
             GetLocation: getPhoneLocation,
             RefreshData: forceRefresh,
-            CacheKeys: cacheKeys
+            CacheKeys: cacheKeys,
+            CoordCollection: coordCollection
         }
 
     })();
