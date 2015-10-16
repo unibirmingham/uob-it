@@ -48,7 +48,7 @@ app.registerInitialise(function () {
         // \uffff to fetch all wildcards matching the first part of the identifier.
         var getItems = Promise.method(function (identifier) {
 
-            return new Promise(function(accept, reject) {
+            return new Promise(function (resolve, reject) {
                 return db.allDocs({
                     include_docs: true,
                     startkey: identifier,
@@ -86,7 +86,16 @@ app.registerInitialise(function () {
                         }).catch(function (subError) {
                             reject(subError);
                         });
-                    } else {
+                    } else if (error.status == 404) {//} && reason == "deleted") {
+                            //recover item and reinsert
+                            return LocalStorageService.RecoverItem(item._id).then(function (recoverResult) {
+                                resolve(recoverResult);
+                            }).catch(function (subError) {
+                                reject(subError);
+                            });
+                    }
+                    else
+                    {
                         reject(error);
                     }
                 });
@@ -130,12 +139,54 @@ app.registerInitialise(function () {
                 db.get(item._id).then(function(doc) {
                     return db.put(doc);
                 }).then(function() {
-                    db.get(item._id).then(function(result) {
+                    return db.get(item._id).then(function(result) {
                         resolve(result);
-                    }).catch(function(error) {
-                        reject(error);
+                    }).catch(function (error) {
+
+                        if (error.status == 404) {//} && reason == "deleted") {
+                            //recover item and reinsert
+                            return LocalStorageService.RecoverItem(item._id).then(function(recoverResult) {
+                                resolve(recoverResult);
+                            }).catch(function(subError) {
+                                reject(subError);
+                            });
+                        } else {
+                            reject(error);
+                        }
+                        
                     });
                 }).catch(function(error) {
+                    reject(error);
+                });
+            });
+        });
+
+
+        /*                    if (error.status == "404" && reason == "deleted") {
+                        //recover item and reinsert
+                        return LocalStorageService.RecoverItem(cacheKeys.FavoriteRooms + "_" + item.BuildingId + "_" + item.RoomId, item).then(function(recoverResult) {
+                            resolve(recoverResult);
+                        }).catch(function(subError) {
+                            reject(subError);
+                        });
+                    }*/
+
+        var removeItem = Promise.method(function(item) {
+            return new Promise(function(resolve, reject) {
+                db.get(item).then(function(document) {
+                    resolve(db.remove(document));
+                }).catch(function(error) {
+                    reject(error);
+                });
+            });
+        });
+
+        var recoverItem = Promise.method(function (item) {
+            return new Promise(function (resolve, reject) {
+                db.get(item, { _deleted: true }).then(function (document) {
+                    document._deleted = false;
+                    resolve(db.put(document));
+                }).catch(function (error) {
                     reject(error);
                 });
             });
@@ -148,7 +199,9 @@ app.registerInitialise(function () {
              StoreItem: setItem,
              StoreItems: setBulk,
              UpdateItem: updateItem,
-             StoreOrUpdate: storeOrUpdate
+             StoreOrUpdate: storeOrUpdate,
+             RemoveItem: removeItem,
+             RecoverItem: recoverItem
          }
 
      })();

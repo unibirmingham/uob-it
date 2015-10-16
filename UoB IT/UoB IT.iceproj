@@ -30,9 +30,12 @@
     <Content Include="cordova.wp8.js" />
     <Content Include="data\Settings.json" />
     <Content Include="data\PcClusters.json" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\FontAwesome.otf" />
     <Content Include="index.html" />
     <Content Include="js\plugins\blurbird.js" />
     <Content Include="js\plugins\moment.min.js" />
@@ -61,7 +64,7 @@
     <Content Include="kendo\styles\kendo.mobile.all.min.css" />
     <Content Include="kendo\typescript\jquery.d.ts" />
     <Content Include="kendo\typescript\kendo.mobile.d.ts" />
-    <Content Include="styles\font-awesome.4.4.0.css" />
+    <Content Include="styles\font-awesome.css" />
     <Content Include="styles\images\appbuilder.png" />
     <Content Include="styles\images\appbuilder2x.png" />
     <Content Include="styles\images\layers-2x.png" />

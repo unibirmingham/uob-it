@@ -95,12 +95,6 @@ var app = {
                 app.registerPostInitialiseCB[length]();
             } while (length--);
         }
-/*
-        LocationRepository.GetLocation(function(results) {
-            console.log(results);
-        });
-        */
-        //   app.registerPush();
     },
     onViewChange: function(e) {
         app.receivedEvent('onViewChange');
@@ -123,14 +117,12 @@ var app = {
             } while (counter--);
 
         };
-
-      //  console.log(moment().add(5, 'minutes').format("hh:mm:ss"));
     },
     onDeviceOffline: function () {
-        //  alert("offline!!");
+        //  console.log("offline!!");
     },
     onDeviceOnline: function () {
-        //  alert("online!!");
+        //  console.log("online!!");
     },
     /* pushReceivedEvent: function(item) {
          app.receivedEvent('pushEventReceived');

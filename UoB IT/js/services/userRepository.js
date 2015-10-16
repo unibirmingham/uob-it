@@ -10,14 +10,22 @@ app.registerInitialise(function() {
         var cacheKeys = { FavoriteRooms: "%USER_REPOSITORY_FAVORITE_ROOMS", Settings: "%USER_REPOSITORY_APP_SETTINGS" };
 
         var removeFavorite = function(item) {
-        //    LocalStorageService.
+            return new Promise(function (resolve, reject) {
+                return LocalStorageService.RemoveItem(cacheKeys.FavoriteRooms + "_" + item.BuildingId + "_" + item.RoomId, item).then(function (result) {
+                    resolve(result);
+                }).catch(function (error) {
+                    reject(error);
+                });
+            });
         };
 
         var addFavorite = Promise.method(function (item) {
             return new Promise(function(resolve, reject) {
-                return LocalStorageService.StoreItem(item.BuildingId + "_" + item.RoomId, item).then(function(result) {
+                return LocalStorageService.StoreOrUpdate(cacheKeys.FavoriteRooms + "_" + item.BuildingId + "_" + item.RoomId, item).then(function (result) {
                     resolve(result);
                 }).catch(function (error) {
+
+
                     reject(error);
                 });
             });
@@ -25,9 +33,10 @@ app.registerInitialise(function() {
 
         var getAllFavorites = Promise.method(function () {
             return new Promise(function(resolve, reject) {
-                return LocalStorageService.GetItem(cacheKeys.FavoriteRooms).then(function (item) {
-                    resolve(item);
+                return LocalStorageService.GetItems(cacheKeys.FavoriteRooms).then(function (items) {
+                    resolve(items);
                 }).catch(function(error) {
+
                     reject(error);
                 });
             });
