@@ -9,35 +9,51 @@ app.registerInitialise(function() {
     UserRepository = (function() {
         var cacheKeys = { FavoriteRooms: "%USER_REPOSITORY_FAVORITE_ROOMS", Settings: "%USER_REPOSITORY_APP_SETTINGS" };
 
-        var removeFavorite = function(item) {
+        var favorites = {}
+
+        //internal func
+        var saveFavorites = Promise.method(function () {
             return new Promise(function (resolve, reject) {
-                return LocalStorageService.RemoveItem(cacheKeys.FavoriteRooms + "_" + item.BuildingId + "_" + item.RoomId, item).then(function (result) {
+                return LocalStorageService.StoreOrUpdate(cacheKeys.FavoriteRooms, favorites).then(function (result) {
+                    favorites = result;
                     resolve(result);
                 }).catch(function (error) {
-                    reject(error);
-                });
-            });
-        };
-
-        var addFavorite = Promise.method(function (item) {
-            return new Promise(function(resolve, reject) {
-                return LocalStorageService.StoreOrUpdate(cacheKeys.FavoriteRooms + "_" + item.BuildingId + "_" + item.RoomId, item).then(function (result) {
-                    resolve(result);
-                }).catch(function (error) {
-
-
                     reject(error);
                 });
             });
         });
 
+
+        var removeFavorite = Promise.method(function (item) {
+
+            var key = item.BuildingId + "_" + item.RoomId;
+            return new Promise(function (resolve, reject) {
+                    if (delete favorites[key]) {
+                            resolve(saveFavorites());
+                    } else {
+                        reject("could not delete item '" + key + "' from favorites.");
+                    }
+                });
+        });
+
+        var addFavorite = Promise.method(function (item) {
+            var key = item.BuildingId + "_" + item.RoomId;
+
+            favorites[key] = item;
+
+            return new Promise(function(resolve) {
+                resolve(saveFavorites());
+            });
+
+        });
+
         var getAllFavorites = Promise.method(function () {
             return new Promise(function(resolve, reject) {
-                return LocalStorageService.GetItems(cacheKeys.FavoriteRooms).then(function (items) {
+                return LocalStorageService.GetItem(cacheKeys.FavoriteRooms).then(function (items) {
+                    favorites = items;
                     resolve(items);
                 }).catch(function(error) {
-
-                    reject(error);
+                        reject(error);    
                 });
             });
         });

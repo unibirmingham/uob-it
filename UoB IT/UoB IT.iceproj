@@ -40,6 +40,7 @@
     <Content Include="js\plugins\blurbird.js" />
     <Content Include="js\plugins\moment.min.js" />
     <Content Include="js\plugins\pouchdb.localstorage.min.js" />
+    <Content Include="js\services\localStorageServiceLocal.js" />
     <Content Include="js\services\locationRepository.js" />
     <Content Include="js\services\userRepository.js" />
     <Content Include="js\views\leafletMap.js" />
@@ -51,6 +52,7 @@
     <Content Include="js\plugins\pouchdb-4.0.3.min.js" />
     <Content Include="js\services\localStorageService.js" />
     <Content Include="js\views\map.js" />
+    <Content Include="js\views\pcAvailabilityFullList.js" />
     <Content Include="js\views\settings.js" />
     <Content Include="js\views\home.js" />
     <Content Include="kendo\js\jquery.min.js" />
@@ -104,6 +106,8 @@
     <Content Include="views\mapDrawer\page1.html" />
     <Content Include="views\mapDrawer\settings.html" />
     <Content Include="views\mapDrawer\home.html" />
+    <Content Include="views\pcAvailabilityFavoriteList.html" />
+    <Content Include="views\pcAvailabilityFullList.html" />
     <Content Include="views\pcAvailabilityLeafletMap.html" />
     <Content Include="views\settings.html" />
     <Resource Include="App_Resources\Android\drawable-hdpi\icon.png" />

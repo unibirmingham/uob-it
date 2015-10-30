@@ -33,39 +33,13 @@ app.registerInitialise(function () {
         //fetched data from a remote source
         var getDataRemote = Promise.method(function (url) {
             return new Promise(function (resolve, reject) {
-                $.getJSON(url, function (data) {
+                return $.getJSON(url, function (data) {
                     resolve(data);
                 }).error(function (jqXhr, textStatus, errorThrown) {
                     reject({ jqXhr, textStatus, errorThrown });
                 });
             });
         });
-
-      /*  var putPCsBulk = Promise.method(function (data) {
-
-            return new Promise(function (resolve, reject) {
-                if (data) {
-                    var length = data.length - 1;
-
-                    //add unique ids to the items
-                    do {
-                        var item = data[length];
-
-                        item._id = item.BuildingId + item.RoomId;
-                    } while (length--);
-
-                    return LocalStorageService.StoreItems(data).then(function (result) {
-                        resolve(result);
-                    }).catch(function (error) {
-                        reject(error);
-                    });
-
-                } else {
-                    reject("no data to add");
-                }
-            });
-
-        });*/
 
         //Checks local storage for a copy of the desired data, if it doesnt
         //exist, it'll pull it in from the passed in service url

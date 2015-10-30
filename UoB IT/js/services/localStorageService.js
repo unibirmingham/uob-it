@@ -15,7 +15,7 @@ app.registerInitialise(function () {
 
     LocalStorageService = (function () {
 
-      //  PouchDB('mydb').destroy();
+        //PouchDB('UoBITApp').destroy();
 
         //set up PouchDB with the websql adapter. We provide a fall back if the phone
         //doesn't support websql
@@ -28,7 +28,7 @@ app.registerInitialise(function () {
          }
 
         //comment this out in production.
-         PouchDB.debug.enable('*');
+    //     PouchDB.debug.enable('*');
 
         //fetches item from the local DB
          var getItem = Promise.method(function (cacheName) {
@@ -86,14 +86,7 @@ app.registerInitialise(function () {
                         }).catch(function (subError) {
                             reject(subError);
                         });
-                    } else if (error.status == 404) {//} && reason == "deleted") {
-                            //recover item and reinsert
-                            return LocalStorageService.RecoverItem(item._id).then(function (recoverResult) {
-                                resolve(recoverResult);
-                            }).catch(function (subError) {
-                                reject(subError);
-                            });
-                    }
+                    } 
                     else
                     {
                         reject(error);
@@ -101,6 +94,17 @@ app.registerInitialise(function () {
                 });
             });
          });
+
+
+
+        /*else if (error.status == 404) {//} && reason == "deleted") {
+                            //recover item and reinsert
+                            return LocalStorageService.RecoverItem(item._id).then(function (recoverResult) {
+                                resolve(recoverResult);
+                            }).catch(function (subError) {
+                                reject(subError);
+                            });
+                    }*/
 
         //Not using yet
         //Allows individual collection items to be passed in 
@@ -182,9 +186,12 @@ app.registerInitialise(function () {
         });
 
         var recoverItem = Promise.method(function (item) {
+            //TODO: needs work. Need to get revs, then reinsert last rev?
+       //     console.log("recoverItem func");
             return new Promise(function (resolve, reject) {
-                db.get(item, { _deleted: true }).then(function (document) {
-                    document._deleted = false;
+                db.get(item/*, { revs: true, open_revs: 'all' }*/).then(function (document) {
+                    // document._deleted = false;
+                    console.log(document);
                     resolve(db.put(document));
                 }).catch(function (error) {
                     reject(error);

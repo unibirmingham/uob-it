@@ -7,6 +7,10 @@ var location;
 var routeControl;
 var favorites;
 
+/*
+ Initialisation
+ */
+app.registerTimedWatcher({ every: 5, then: function () { LocationRepository.RefreshData(LocationRepository.CacheKeys.AllPCs); } });
 
 //utility function to find a room object using roomId
 var fetchItemFromRoomId = function (roomId) {
@@ -28,24 +32,14 @@ var fetchItemFromRoomId = function (roomId) {
 }
 
 //utility function to chick if a room id has been added to favorites. Perhaps use an associative array for lookups without looping?
-var isFavorite = function (roomId) {
+
+
+var isFavorite = function (key) {
+
     if (favorites) {
-
-        console.log("in isFavorite");
-        
-        var index = favorites.rows.length - 1;
-        var result = false;
-        do {
-
-            if (favorites.rows[index].doc.RoomId == roomId) {
-                result = true;
-                break;
-            }
-        } while (index--)
-
-        return result;
+        console.log(favorites);
+        return key in favorites;
     }
-
     return false;
 }
 
@@ -102,15 +96,20 @@ var addFavorite = function (roomId) {
     var item = fetchItemFromRoomId(roomId);
 
     if (item) {
-        console.log(item);
-        UserRepository.AddFavorite(item).then(function (result) {
-            var domItem = $("#" + roomId);
 
-            domItem.removeClass("fa-star-o");
-            domItem.addClass("fa-star");
-            domItem.unbind('click');
-            domItem.click(function () {
-                removeFavorite(domItem.roomId);
+        var key = item.BuildingId + "_" + item.RoomId;
+
+        // console.log(item);
+        UserRepository.AddFavorite(item).then(function (result) {
+          //  alert("here in Add");
+            var $domItem = $("#" + key);
+
+            $domItem.removeClass("fa-star-o");
+            $domItem.addClass("fa-star");
+            $domItem.unbind('click');
+
+            $domItem.click(function () {
+                removeFavorite(roomId);
             });
 
         }).catch(function (error) {
@@ -118,6 +117,8 @@ var addFavorite = function (roomId) {
         });
     } else {
         //error popup?
+        console.log("addFavorite error!");
+        console.log(roomId);
     }
 };
 
@@ -125,32 +126,42 @@ var addFavorite = function (roomId) {
 var removeFavorite = function (roomId) {
     var item = fetchItemFromRoomId(roomId);
 
-    UserRepository.RemoveFavorite(item).then(function (result) {
-        var domItem = $("#" + roomId);
+    if (item) {
 
-        domItem.removeClass("fa-star");
-        domItem.addClass("fa-star-o");
-        domItem.unbind('click');
-        domItem.click(function (roomId) {
-            addFavorite(roomId);
+        var key = item.BuildingId + "_" + item.RoomId;
+
+        UserRepository.RemoveFavorite(item).then(function (result) {
+
+            var $domItem = $("#" + key);
+
+            $domItem.removeClass("fa-star");
+            $domItem.addClass("fa-star-o");
+            $domItem.unbind('click');
+
+            $domItem.click(function () { addFavorite(roomId); });
+
+        }).catch(function (error) {
+            console.log(error);
         });
-    }).catch(function (error) {
-        console.log(error);
-    });;
+    } else {
+        //error popup?
+        console.log("removeFavorite error! " + roomId);
+    }
 };
 
 //We initilaise first to try and grab favorites, then when generate map
 var initialiseMap = function () {
-    UserRepository.GetAllFavorites().then(function(results) {
+    UserRepository.GetAllFavorites().then(function (results) {
         favorites = results;
         populateMap();
     }).catch(function (error) {
         console.log(error);
         populateMap();
+
     });
 };
 
-var populateMap = function() {
+var populateMap = function () {
     LocationRepository.GetAllPCs(location).then(function (results) {
 
         nearestPcsObjects = results;
@@ -180,14 +191,18 @@ var populateMap = function() {
 
             do {
                 var item = nearestPcsObjects[arraySize];
+                //   var roomId = item.RoomId;
 
                 var info = "<div>" + item.FacilityName + "</div><div>Availible PCs: " + item.NoOfPcsFree + "</div>";
                 //+ "<div><button href='#' onclick='javascript:addFavorite(\"" + item.RoomId + "\");'><i class='fa fa-star' class='font-size: 50px;'></i></button></div>"
 
-                if (isFavorite(item.RoomId))
-                    info += "<div><i id='" + item.RoomId + "' onclick='javascript:removeFavorite(\"" + item.RoomId + "\");' class='fa fa-star fa-2x star-icon-full'></i></div>";
-                else
-                    info += "<div><i id='" + item.RoomId + "' onclick='javascript:addFavorite(\"" + item.RoomId + "\");' class='fa fa-star-o fa-2x'></i></div>";
+                var key = item.BuildingId + "_" + item.RoomId;
+
+                if (isFavorite(key)) {
+                    info += "<div><i id='" + key + "' class='fa fa-star fa-2x'></i></div>";
+                } else {
+                    info += "<div><i id='" + key + "' class='fa fa-star-o fa-2x'></i></div>";
+                }
 
                 info += "<div><button onclick='javascript:getDirections( " + location[0] + ", " + location[1] + ", " + item.CoordinatesArray[0] + ", " + item.CoordinatesArray[1] + ");'>Directions</button></div>";
 
@@ -205,10 +220,42 @@ var populateMap = function() {
             nearestPcsLayer.addLayer(markers).addTo(map);
         };
 
+    }).then(function () {
+        attachListners();
     }).catch(function (error) {
         console.log(error);
     });
-}
+
+
+
+};
+
+var attachListners = function () {
+
+    if (nearestPcsObjects) {
+        var arraySize = nearestPcsObjects.length - 1;
+
+        do {
+
+            var item = nearestPcsObjects[arraySize];
+            var key = item.BuildingId + "_" + item.RoomId;
+
+            //need to use 'on' to attach event before DOM has been generated
+            if (isFavorite(key)) {
+
+                $('body').on('click', "#" + key, function () {
+                    removeFavorite(item.RoomId);
+                });
+            } else {
+
+                $('body').on('click', "#" + key, function () {
+                    addFavorite(item.RoomId);
+                });
+            }
+        } while (arraySize--);
+    };
+};
+
 
 //kendo ui observable for UI
 models.leafletMap = kendo.observable({
@@ -239,12 +286,16 @@ models.leafletMap = kendo.observable({
             }).addTo(map);
 
             initialiseMap();
+
+        }).catch(function (error) {
+            console.log(error);
         });
 
     },
     onShow: function () {
+
+
     },
     title: "Map"
 });
 
-app.registerTimedWatcher({ every: 5, then: function () { LocationRepository.RefreshData(LocationRepository.CacheKeys.AllPCs); } })
