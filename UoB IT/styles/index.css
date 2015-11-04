@@ -1,0 +1,426 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+* {
+   /* -webkit-tap-highlight-color: rgba(0,0,0,0);*/ /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+}
+
+body {
+    /*-webkit-touch-callout: none;   */             /* prevent callout to copy image, etc when tap to hold */
+  /*  -webkit-text-size-adjust: none;  */           /* prevent webkit from resizing text to fit */
+   /* -webkit-user-select: none;    */              /* prevent copy paste, to allow, change 'none' to 'text' */
+  /*  background-color:#E4E4E4;
+    background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    background-image:-webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0, #A7A7A7),
+        color-stop(0.51, #E4E4E4)
+    );
+    background-attachment:fixed;
+    font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+    font-size:12px;
+    height:100%;
+    margin:0px;
+    padding:0px;
+    text-transform:uppercase;
+    width:100%;*/
+}
+
+/* Portrait layout (default) */
+.app {
+    background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
+    position:absolute;             /* position in the center of the screen */
+    left:50%;
+    top:50%;
+    height:50px;                   /* text area height */
+    width:225px;                   /* text area width */
+    text-align:center;
+    padding:180px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
+    margin:-115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
+                                   /* offset horizontal: half of text area width */
+}
+
+/* Landscape layout (with min-width) */
+@media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
+    .app {
+        background-position:left center;
+        padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
+        margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
+                                      /* offset horizontal: half of image width and text area width */
+    }
+}
+
+h1 {
+    font-size:24px;
+    font-weight:normal;
+    margin:0px;
+    overflow:visible;
+    padding:0px;
+    text-align:center;
+}
+
+.event {
+    border-radius:4px;
+    -webkit-border-radius:4px;
+    color:#FFFFFF;
+    font-size:12px;
+    margin:0px 30px;
+    padding:2px 0px;
+}
+
+.event.listening {
+    background-color:#333333;
+    display:block;
+}
+
+.event.received {
+    background-color:#4B946A;
+    display:none;
+}
+
+@keyframes fade {
+    from { opacity: 1.0; }
+    50% { opacity: 0.4; }
+    to { opacity: 1.0; }
+}
+ 
+@-webkit-keyframes fade {
+    from { opacity: 1.0; }
+    50% { opacity: 0.4; }
+    to { opacity: 1.0; }
+}
+ 
+.blink {
+    animation:fade 3000ms infinite;
+    -webkit-animation:fade 3000ms infinite;
+}
+
+
+.star-icon-empty {
+    color: yellow;
+}
+.star-icon-full {
+    color: yellow;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: orange;
+}
+
+/* ############################ Testing Style #######################  */
+
+#kendoUiMobileApp .image-with-text img {
+    float: left;
+    margin-right: 15px;
+}
+#kendoUiMobileApp .block {
+    display: block;
+    margin: 1em;
+    padding: 1em;
+    text-align: center;
+}
+#kendoUiMobileApp .button-group,
+#kendoUiMobileApp .icon-group {
+    width: 100%;
+    display: table;
+    border-collapse: separate;
+    border-spacing: 1em;
+}
+#kendoUiMobileApp .button-group {
+    table-layout: fixed;
+}
+#kendoUiMobileApp .button-group .km-button {
+    display: table-cell;
+    padding: .6em .8em;
+    margin: 1em 0;
+}
+#kendoUiMobileApp .button-group.button-group-vertical .km-button {
+    display: block;
+}
+#kendoUiMobileApp .group-separator {
+    border: none;
+    background: transparent;
+}
+#kendoUiMobileApp .group-separator-header {
+    margin: 1em 0;
+}
+#kendoUiMobileApp .app-icon {
+    text-align: center;
+    margin: 3em 0;
+}
+#kendoUiMobileApp .view-title {
+    text-align: center;
+    font-weight: normal;
+}
+#kendoUiMobileApp .km-drawer-button:after,
+#kendoUiMobileApp .km-drawer-button:before {
+    content: '\e077';
+}
+#kendoUiMobileApp.km-flat .km-drawer .km-content {
+    background-color: #fcfcfc;
+}
+#kendoUiMobileApp .icon-group .app-icon,
+#kendoUiMobileApp .icon-group .app-details {
+    display: table-cell;
+    vertical-align: top;
+}
+#kendoUiMobileApp .icon-group .app-icon {
+    margin: 0;
+    width: 5em;
+    overflow: hidden;
+    text-align: left;
+}
+#kendoUiMobileApp .icon-group .app-icon img {
+    display: block;
+    max-width: 5em;
+    height: auto;
+}
+#kendoUiMobileApp .icon-group .app-details h2,
+#kendoUiMobileApp .icon-group .app-details h4 {
+    font-weight: normal;
+    margin: 0;
+}
+#kendoUiMobileApp .icon-group .app-details h4 {
+    color: #828282;
+    margin-top: 0.5em;
+}
+/*Fix navigation labels*/
+
+#kendoUiMobileApp #navigation-container.km-tabstrip .km-button {
+    vertical-align: top;
+}
+#kendoUiMobileApp #navigation-container.km-tabstrip .km-button .km-text {
+    max-width: 100%;
+    word-wrap: break-word;
+}
+/* iOS fix for status bar */
+
+.km-header .km-navbar {
+    background-color: #A84D97;
+}
+.km-header .km-widget,
+.km-header .km-view-title {
+    color: white;
+}
+.km-header .km-button {
+    background: transparent;
+    border-color: transparent;
+    padding: 8px;
+    padding-left: 14px;
+    padding-right: 20px;
+    font-size: 26px;
+    margin: 0;
+    margin-left: -7px;
+}
+/* Customer Services Manager */
+
+.customer-services-manager-row img {
+    float: left;
+    width: 30%;
+    padding-right: 10px;
+    max-width: 100px;
+}
+.customer-services-manager-row .details {
+    float: left;
+    width: 70%;
+    padding-right: 20px;
+}
+.customer-services-manager-row .name {
+    margin: 0;
+    margin-top: 5px;
+    margin-bottom: 6px;
+    font-size: 20px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #efefef;
+}
+.customer-services-manager-row .area {
+    margin-top: 5px;
+    margin: 0;
+    font-size: 15px;
+    color: #888
+}
+@media (min-width: 400px) {
+    .customer-services-manager-row .name {
+        font-size: 24px;
+    }
+    .customer-services-manager-row .area {
+        font-size: 18px;
+    }
+}
+#home-view .km-content {
+    background-color: #A84D97;
+}
+#residence-button {
+    background-color: white;
+    color: #A84D97;
+    display: block;
+    margin: 10px;
+    margin-bottom: 20px;
+    margin-top: 4px;
+}
+.km-flat .km-popup.km-pane {
+    border: none;
+}
+.km-flat .km-popup-arrow:after {
+    border-color: white transparent;
+}
+#residence-help {
+    color: white;
+    text-align: center;
+    font-size: 12px;
+}
+#home-logo {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.km-flat .km-button.home-icon {
+    display: block;
+    width: 50%;
+    height: 32%;
+    float: left;
+    text-align: center;
+    padding: 10px;
+    text-decoration: none;
+    border: none;
+    background-color: transparent;
+    margin: 0;
+    border-style: none;
+    border-width: 0;
+}
+.home-icon img {
+    width: 45%;
+    margin-bottom: 10px;
+}
+.home-icon .title {
+    color: white;
+}
+#logo-container {
+    margin-bottom: 20px;
+}
+.white-line {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0));
+    width: 80%;
+}
+.details-header {
+    text-align: center;
+}
+.details-twitter,
+.details-mailto {
+    text-align: center;
+}
+.details-twitter .km-button {
+    width: 49%;
+    margin: 0;
+    border: none;
+    border-width: 0;
+    background-color: transparent;
+}
+.details-mailto .km-button {
+    width: 100%;
+    margin: 0;
+    border: none;
+    border-width: 0;
+    background-color: transparent;
+}
+.km-root .km-pane .km-view .km-back {
+    background-image: url("./images/back.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    -webkit-background-clip: border-box;
+}
+.km-root .km-pane .km-view .km-burger {
+    background-image: url("./images/burger.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    -webkit-background-clip: border-box;
+    background-position: center center;
+}
+#residence-select {
+    width: 100%;
+    font-size: 18px;
+}
+.text-center {
+    text-align: center;
+}
+.link-button {
+    border: none !important;
+    border-width: 0 !important;
+    background-color: transparent !important;
+    color: #A84D97 !important; /*old color: #00AEC6*/
+}
+#laundry-machine-list img {
+    float: left;
+    height: 50px;
+    margin-right: 10px;
+}
+#laundry-machine-list .name {
+    margin-top: 6px;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+#laundry-machine-list .time-remaining {
+    margin: 0;
+}
+#washers-available,
+#dryers-available {
+    text-align: center;
+}
+#map {
+    min-height: 200px;
+}
+#map-drawer {
+    color: white;
+    background-color: black;
+    position: relative;
+    text-align: center;
+    height: 100px;
+}
+#map-drawer > div {
+    margin-bottom: 4px;
+}
+#map-drawer .km-switch {
+    vertical-align: middle;
+}
+#drawer-toggle {
+    padding: 0;
+    border-style: 0;
+    border-width: 0;
+    border-radius: 0;
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+}
+#drawer-toggle img {
+    height: 10px;
+    margin: 5px;
+}
+
+.marker-content h3 {
+    margin-left: 0;
+}
+
+.marker-content img {
+    width: 100%;
+}

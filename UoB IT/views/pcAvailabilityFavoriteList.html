@@ -1,9 +1,18 @@
-<!DOCTYPE html>
+<div data-role="view" data-title="PC List View" data-layout="main" data-model="models.pcAvailability" data-show="models.pcAvailability.onShow">
+    <h1 data-bind="html: title"></h1>
+    <ul id="pcAvailabilityListFavorites" data-role="listview" data-source="models.pcAvailability.FavoriteList.dataSource" data-template="pcFavoriteListTemplate"></ul>
 
-<html>
-    <head>
-        <title></title>
-    </head>
-    <body>
-    </body>
-</html>
+
+</div>
+
+<script type="text/x-kendo-template" id="pcFavoriteListTemplate">
+
+    <div class="pcListItem">
+        <h4 class="pcListFacilityName">#: FacilityName #</h4>
+        <p>#: NoOfPcsFree # PC's Availible</p>
+    </div>
+
+
+</script>
+
+

@@ -1,3 +1,46 @@
-<div data-role="view" data-title="Home" data-layout="main" data-model="models.home"  data-show="models.home.onShow" data-stretch="true">
-  <h1 data-bind="html: title"></h1>
+<div id="home-view" data-role="view" data-title="Home" data-layout="home" data-model="models.home" data-show="models.home.onShow" data-stretch="true">
+    <div id="home-container">
+        <div id="logo-container">
+            <img src="styles/images/home/UOB-logo.png" alt="The University of Birmingham" id="home-logo" />
+            <hr class="white-line" />
+        </div>
+        <div id="icons-container" style="margin-top: 3em;">
+            <a href="views/pcAvailabilityLeafletMap.html" class="home-icon" data-role="button">
+                <i class="fa fa-desktop fa-5x" style="color: white;"></i>
+                <div class="title">
+                    PC Availability
+                </div>
+            </a>
+            <a href="views/pockedGuideHome.html" class="home-icon" data-role="button">
+                <i class="fa fa-leanpub fa-5x" style="color: white;"></i>
+                <div class="title">
+                    Pocket Guide
+                </div>
+            </a>
+            <a href="views/news.html" class="home-icon" data-role="button">
+                <i class="fa fa-newspaper-o fa-5x" style="color: white;"></i>
+                <div class="title">
+                    News
+                </div>
+            </a>
+            <a href="views/twitter.html" class="home-icon" data-role="button">
+                <i class="fa fa-twitter-square fa-5x" style="color: white;"></i>
+                <div class="title">
+                    Twitter
+                </div>
+            </a>
+            <a href="views/facebook.html" class="home-icon" data-role="button">
+                <i class="fa fa-facebook-square fa-5x" style="color: white;"></i>
+                <div class="title">
+                    Facebook
+                </div>
+            </a>
+            <a href="views/settings.html" class="home-icon" data-role="button">
+                <i class="fa fa-cogs fa-5x" style="color: white;"></i>
+                <div class="title">
+                    Settings
+                </div>
+            </a>
+        </div>
+    </div>
 </div>

@@ -1,18 +1,23 @@
-<style>
-    #map {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-    }
-</style>
+
 <!--
 <div data-role="view" data-title="Map" data-layout="map-view" data-model="models.leafletMap" data-show="models.leafletMap.onShow" data-stretch="true">
     <div id="map"></div>
 
 </div>-->
+<script>
+      //  var app = new kendo.mobile.Application();
 
+        var viewModel = kendo.observable({
+          onSelect: function(e) {
+              var current = e.sender.current(),
+                  navigateTo = current.data("navigateTo");
 
-<div data-role="view" data-title="PC Map View" data-layout="main" data-model="models.leafletMap" data-init="models.leafletMap.onInit" data-show="models.leafletMap.onShow" data-stretch="true" data-reload="true">
+              app.mobile.navigate(navigateTo);
+          }
+        });
+</script>
+
+<div id="PCMapView" data-role="view" data-model="viewModel" data-title="PC Map View" data-layout="main" data-model="models.leafletMap" data-init="models.leafletMap.onInit" data-show="models.leafletMap.onShow" data-stretch="true" data-reload="true">
     <div id="map"></div>
     <!--
     <div id="map-drawer-container" style="position: absolute; left:0; bottom: -80px;">
@@ -30,4 +35,11 @@
             </div>
         </div>
     </div>-->
+
+    <footer data-role="footer">
+        <ul data-role="buttongroup" data-index="0" data-bind="events: { select: onSelect }">
+            <li data-navigate-to="views/pcAvailabilityLeafletMap.html">Map</li>
+            <li data-navigate-to="views/pcAvailabilityFullList.html">List</li>
+        </ul>
+    </footer>
 </div>

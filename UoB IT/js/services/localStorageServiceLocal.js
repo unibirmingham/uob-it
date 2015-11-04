@@ -1,10 +1,6 @@
 /*
     Local storage sevice.
     All db/local storage operations should use this facade.
-
-   ### currently using pouch db ###
-   All items inserted into PouchDB *must* have a unique '_id' field. 
-   I'm currently using cache keys for this purpose.
 */
 
 //Add setObject / getObject to localStorage so we don't have to keep parsing and stringifying data for our json objects
@@ -19,8 +15,6 @@ Storage.prototype.getObject = function (key) {
 
 
 var LocalStorageService;
-
-//todo: look into fallback to localstorage, see here: http://pouchdb.com/adapters.html
 
 app.registerInitialise(function () {
     //only for dev! 

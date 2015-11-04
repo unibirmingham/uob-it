@@ -1,7 +1,7 @@
 'use strict';
 
 app.registerPostInitialise(function() {
-    LocationRepository.RefreshData(LocationRepository.CacheKeys.AllPCs);
+    LocationService.RefreshData(LocationService.CacheKeys.AllPCs);
 });
 
 models.home = kendo.observable({

@@ -1,14 +1,34 @@
-<div data-role="view" data-title="PC List View" data-layout="main" data-model="models.pcAvailabilityFullList" data-show="models.pcAvailabilityFullList.onShow" data-stretch="true">
+<div id="PCListView" data-model="viewModel" data-role="view" data-title="PC List View" data-layout="main" data-model="models.pcAvailability.FullList" data-show="models.pcAvailability.onShow">
     <h1 data-bind="html: title"></h1>
-    <ul id="pcAvailabilityListFull" data-role="listview" datasource="PcAvailability.dataSource" data-template="pcFullListTemplate"></ul>
+    <ul id="pcAvailabilityListFull" data-role="listview" data-source="models.pcAvailability.FullList.dataSource" data-template="pcFullListTemplate"></ul>
 
-
+    <footer data-role="footer">
+        <ul data-role="buttongroup" data-index="1" data-bind="events: { select: onSelect }">
+            <li data-navigate-to="views/pcAvailabilityLeafletMap.html">Map</li>
+            <li data-navigate-to="views/pcAvailabilityFullList.html">List</li>
+        </ul>
+    </footer>
 </div>
+<script>
+      //  var app = new kendo.mobile.Application();
 
+        var viewModel = kendo.observable({
+          onSelect: function(e) {
+              var current = e.sender.current(),
+                  navigateTo = current.data("navigateTo");
+
+              app.mobile.navigate(navigateTo);
+          }
+        });
+</script>
 <script type="text/x-kendo-template" id="pcFullListTemplate">
 
-    
-            <h2 class="BuildingId">#: BuildingId #</h2>
-       
+    <div class="pcListItem">
+        <h4 class="pcListFacilityName">#: FacilityName #</h4>
+        <p>#: NoOfPcsFree # PC's Availible</p>
+    </div>
+            
 
 </script>
+
+

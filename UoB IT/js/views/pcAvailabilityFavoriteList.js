@@ -3,7 +3,7 @@
 var fullPcList;
 var location;
 
-models.pcAvailability = kendo.observable({
+models.pcAvailabilityFavoriteList = kendo.observable({
     onInit: function () {
 
     },
@@ -14,43 +14,12 @@ models.pcAvailability = kendo.observable({
 });
 
 
-models.pcAvailability.FullList = {
+models.pcAvailabilityFavoriteList.PcAvailability = {
     dataSource: {
         type: 'json',
         transport: {
             read: function (options) {
               
-                LocationService.GetLocation().then(function (location) {
-                 
-                    if (location && location.coords)
-                        location = [location.coords.latitude, location.coords.longitude];
-                    else
-                        location = LocationService.CoordCollection.CentralCampus;
-
-                }).then(function () {
-                    LocationService.GetAllPCs(location).then(function (pcData) {
-
-                        options.success(pcData);
-
-                    }).catch(function (pcFetchError) {
-                        options.error(pcFetchError);
-                    });
-                }).catch(function (locationError) {
-                    options.error(locationError);
-                    console.log(locationError);
-                });
-            }
-        }
-    }
-};
-
-
-models.pcAvailability.FavoriteList = {
-    dataSource: {
-        type: 'json',
-        transport: {
-            read: function (options) {
-
                 UserRepository.GetAllFavorites().then(function (favorites) {
 
                     options.success(favorites);
@@ -64,7 +33,6 @@ models.pcAvailability.FavoriteList = {
         }
     }
 };
-
 
 /*new kendo.data.DataSource({
         transport: {

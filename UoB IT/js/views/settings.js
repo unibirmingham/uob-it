@@ -15,7 +15,7 @@ models.settings = kendo.observable({
         // 
     //    var item = LocalStorageService.GetItem("dfsfddddsdfs");
 
-      //  var pcs = LocationRepository.GetAllPCs();
+      //  var pcs = LocationService.GetAllPCs();
        // console.log(pcs);
     },
     title: "asdsad"

@@ -28,6 +28,7 @@
     <Content Include="cordova.android.js" />
     <Content Include="cordova.ios.js" />
     <Content Include="cordova.wp8.js" />
+    <Content Include="data\PocketGuide.json" />
     <Content Include="data\Settings.json" />
     <Content Include="data\PcClusters.json" />
     <Content Include="fonts\fontawesome-webfont.eot" />
@@ -40,8 +41,12 @@
     <Content Include="js\plugins\blurbird.js" />
     <Content Include="js\plugins\moment.min.js" />
     <Content Include="js\plugins\pouchdb.localstorage.min.js" />
+    <Content Include="js\services\localFileManager.js" />
     <Content Include="js\services\localStorageServiceLocal.js" />
-    <Content Include="js\services\locationRepository.js" />
+    <Content Include="js\services\locationService.js" />
+    <Content Include="js\services\pcClusterService.js" />
+    <Content Include="js\services\pocketGuideRepository.js" />
+    <Content Include="js\services\remoteServiceManager.js" />
     <Content Include="js\services\userRepository.js" />
     <Content Include="js\views\leafletMap.js" />
     <Content Include="js\plugins\leaflet-routing-machine.js" />
@@ -52,9 +57,11 @@
     <Content Include="js\plugins\pouchdb-4.0.3.min.js" />
     <Content Include="js\services\localStorageService.js" />
     <Content Include="js\views\map.js" />
+    <Content Include="js\views\pcAvailabilityFavoriteList.js" />
     <Content Include="js\views\pcAvailabilityFullList.js" />
     <Content Include="js\views\settings.js" />
     <Content Include="js\views\home.js" />
+    <Content Include="views\twitter.html" />
     <Content Include="kendo\js\jquery.min.js" />
     <Content Include="kendo\js\kendo.mobile.min.js" />
     <Content Include="kendo\styles\images\back.png" />
@@ -69,6 +76,9 @@
     <Content Include="styles\font-awesome.css" />
     <Content Include="styles\images\appbuilder.png" />
     <Content Include="styles\images\appbuilder2x.png" />
+    <Content Include="styles\images\back.png" />
+    <Content Include="styles\images\burger.png" />
+    <Content Include="styles\images\home\UOB-logo.png" />
     <Content Include="styles\images\layers-2x.png" />
     <Content Include="styles\images\layers.png" />
     <Content Include="styles\images\leaflet.routing.icons.png" />
@@ -152,7 +162,7 @@
     <Resource Include="App_Resources\WP8\Assets\WideLogo.png" />
     <Resource Include="App_Resources\WP8\Tiles\Iconic\110x110.png" />
     <Resource Include="App_Resources\WP8\Tiles\Iconic\202x202.png" />
-    <Content Include="css\index.css" />
+    <Content Include="styles\index.css" />
     <Content Include="img\cordova.png" />
     <Content Include="img\logo.png" />
     <Content Include="js\app.js" />
@@ -169,7 +179,6 @@
     <Folder Include="App_Resources\WP8\Assets\" />
     <Folder Include="App_Resources\WP8\Tiles\" />
     <Folder Include="App_Resources\WP8\Tiles\Iconic\" />
-    <Folder Include="css\" />
     <Folder Include="fonts\" />
     <Folder Include="img\" />
     <Folder Include="js\" />
@@ -185,6 +194,7 @@
     <Folder Include="data\" />
     <Folder Include="styles\" />
     <Folder Include="styles\images\" />
+    <Folder Include="styles\images\home\" />
     <Folder Include="views\" />
     <Folder Include="Plugins\" />
     <Folder Include="views\mapDrawer\" />

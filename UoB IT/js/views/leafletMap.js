@@ -10,7 +10,7 @@ var favorites;
 /*
  Initialisation
  */
-app.registerTimedWatcher({ every: 5, then: function () { LocationRepository.RefreshData(LocationRepository.CacheKeys.AllPCs); } });
+app.registerTimedWatcher({ every: 5, then: function () { PcClusterService.RefreshData(PcClusterService.CacheKeys.AllPCs); } });
 
 //utility function to find a room object using roomId
 var fetchItemFromRoomId = function (roomId) {
@@ -162,7 +162,7 @@ var initialiseMap = function () {
 };
 
 var populateMap = function () {
-    LocationRepository.GetAllPCs(location).then(function (results) {
+    PcClusterService.GetNearestPCs(location).then(function (results) {
 
         nearestPcsObjects = results;
 
@@ -263,7 +263,7 @@ models.leafletMap = kendo.observable({
 
         var spinIcon;
 
-        LocationRepository.GetLocation().then(function (location) {
+        LocationService.GetLocation().then(function (location) {
 
             if (location && location.coords) {
                 location = [location.coords.latitude, location.coords.longitude];
@@ -273,7 +273,7 @@ models.leafletMap = kendo.observable({
             } else {
                 //couldn't get location, use central campus - perhaps a different icon?
                 spinIcon = L.AwesomeMarkers.icon({ icon: 'male', prefix: 'fa', markerColor: 'red' });
-                location = LocationRepository.CoordCollection.CentralCampus;
+                location = LocationService.CoordCollection.CentralCampus;
 
             };
 
