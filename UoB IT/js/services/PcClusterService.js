@@ -11,8 +11,10 @@ app.registerInitialise(function () {
         var forceRefreshKeys = {};
 
         var cacheKeys = {
-            AllPCs: "%PC_CLUSTER_SERVICE_GET_ALL_PCS",
-            Campus: "%PC_CLUSTER_SERVICE_CAMPUS%"
+            AllPCs: "%PC_CLUSTER_SERVICE_GET_ALL_PCS%",
+            Campus: "%PC_CLUSTER_SERVICE_CAMPUS%",
+            CampusBuildings: "%PC_CLUSTER_SERVICE_BUILDINGS_{MAPID}%",
+            BuildingClusters: "%PC_CLUSTER_SERVICE_CLUSTERS%"
         };
 
         // List of Service endpoints for Pc Cluster functions
@@ -52,8 +54,9 @@ app.registerInitialise(function () {
 
         });
 
-        var getCampuses = Promise.method(function() {
-            return new Promise(function(resolve, reject) {
+        //returns all iniversity defined campuses
+        var getCampuses = Promise.method(function () {
+            return new Promise(function (resolve, reject) {
                 return RemoteServiceManager.FetchRemoteCache(urls.Campus, cacheKeys.Campus).then(function (result) {
                     resolve(result);
                 }).catch(function (error) {
@@ -62,6 +65,79 @@ app.registerInitialise(function () {
             });
         });
 
+        //returns buildings for specified campus (id)
+        var getCampusBuildings = Promise.method(function (campusId) {
+            return new Promise(function (resolve, reject) {
+
+                if (campusId == null) {
+                    reject("No campus id passed into getCampusBuilding function");
+                }
+                else {
+
+                    return RemoteServiceManager.FetchRemoteCache(urls.Buildings.replace("{MAPID}", campusId), cacheKeys.CampusBuildings.replace("{MAPID}", campusId)).then(function (result) {
+                        resolve(result);
+                    }).catch(function (error) {
+                        reject(error);
+                    });
+                }
+            });
+        });
+
+        //returns clusters for specified building (id)
+        var getBuildingClusters = Promise.method(function (buildingId) {
+            return new Promise(function (resolve, reject) {
+
+                if (buildingId == null) {
+                    reject("No building id passed into getBuildingClusters function");
+                }
+                else {
+                    return RemoteServiceManager.FetchRemoteCache(urls.Clusters.replace("{BUILDINGID}", buildingId), cacheKeys.BuildingClusters).then(function (result) {
+                        resolve(result);
+                    }).catch(function (error) {
+                        reject(error);
+                    });
+                }
+            });
+        });
+
+        //fetch campus name using campus id
+        var getCampus = Promise.method(function (campusId) {
+            return new Promise(function (resolve, reject) {
+                return getCampuses().then(function (result) {
+
+                    if (result.length > 0) {
+                        var counter = result.length - 1;
+
+                        do {
+                            if (campusId == result[counter].ContentId) {
+                                resolve(result[counter]);
+                                break;
+                            }
+                        } while (counter--)
+                    }
+                    else {
+                        reject("Could not find campus name id: " + campusId);
+                    }
+
+
+                }).catch(function (getCampusError) {
+
+                    reject(getCampusError);
+                });
+            });
+        });
+
+        //todo: finish this!
+        var getBuilding = Promise.method(function (buildingId) {
+            return new Promise(function (resolve, reject) {
+                var i = 0, items = {}, sKey;
+                for (; sKey = window.localStorage.key(i) ; i++) {
+                    if (sKey.indexOf("%PC_CLUSTER_SERVICE_BUILDINGS_") > -1) {
+                        items[sKey] = window.localStorage.getItem(sKey);
+                    }
+                }
+            });
+        });
 
         //adds a key to the refresh array. On the next local storage request
         //for the specified key, a remote fetch will occur, the results
@@ -74,7 +150,11 @@ app.registerInitialise(function () {
 
         return {
             GetCampuses: getCampuses,
+            GetCampusBuildings: getCampusBuildings,
+            getBuildingClusters: getBuildingClusters,
             GetNearestPCs: getNearestPcsToMe,
+            GetCampus: getCampus,
+
             RefreshData: forceRefresh,
             CacheKeys: cacheKeys
         }

@@ -1,0 +1,15 @@
+<div data-role="view" data-title="Campuses" data-layout="main" data-model="models.pcClusters" data-show="models.pcClusters.onShow">
+    <h1 data-bind="html: title"></h1>
+    <ul id="pcClusters" data-role="listview" data-source="models.pcClusters.Campuses.dataSource" data-template="pcClusterTemplate"></ul>
+</div>
+
+<script type="text/x-kendo-template" id="pcClusterTemplate">
+
+    <div onclick="javascript: app.mobile.navigate('/views/settings.html');">
+        <h4 >#: MapName #</h4>
+       
+    </div>
+
+
+</script>
+

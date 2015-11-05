@@ -1,0 +1,14 @@
+<div data-role="view" data-title="PC Clusters" data-layout="main" data-model="models.pcClusters.Campuses" data-show="models.pcClusters.Campuses.onShow" data-reload="true">
+    <h1 data-bind="html: title"></h1>
+    <ul id="pcCampuses" data-role="listview" data-source="models.pcClusters.Campuses.dataSource" data-template="pcCampusesTemplate"></ul>
+</div>
+
+<script type="text/x-kendo-template" id="pcCampusesTemplate">
+
+    <div onclick="javascript: app.mobile.navigate('/views/pcClusters/pcBuildings.html?campusId=' + #:ContentId#);">
+        <h2><i class="fa fa-university" style="margin-right: 10px;"></i> #: MapName # <i class="fa fa-arrow-circle-right" style="margin-left: 30px;"></i></h2> 
+    </div>
+
+
+</script>
+

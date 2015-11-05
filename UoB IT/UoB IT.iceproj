@@ -43,8 +43,13 @@
     <Content Include="js\plugins\pouchdb.localstorage.min.js" />
     <Content Include="js\services\localFileManager.js" />
     <Content Include="js\services\localStorageServiceLocal.js" />
+    <Content Include="js\services\locationRepository.js">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="js\services\locationService.js" />
-    <Content Include="js\services\pcClusterService.js" />
+    <Content Include="js\services\pcClusterService.js">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="js\services\pocketGuideRepository.js" />
     <Content Include="js\services\remoteServiceManager.js" />
     <Content Include="js\services\userRepository.js" />
@@ -58,9 +63,14 @@
     <Content Include="js\services\localStorageService.js" />
     <Content Include="js\views\map.js" />
     <Content Include="js\views\pcAvailabilityFavoriteList.js" />
+    <Content Include="js\views\pcClusters.js" />
     <Content Include="js\views\pcAvailabilityFullList.js" />
     <Content Include="js\views\settings.js" />
     <Content Include="js\views\home.js" />
+    <Content Include="views\pcClusters.html" />
+    <Content Include="views\pcClusters\pcClusters.html" />
+    <Content Include="views\pcClusters\pcBuildings.html" />
+    <Content Include="views\pcClusters\pcCampuses.html" />
     <Content Include="views\twitter.html" />
     <Content Include="kendo\js\jquery.min.js" />
     <Content Include="kendo\js\kendo.mobile.min.js" />
@@ -113,9 +123,6 @@
     <Content Include="styles\MarkerCluster.Default.css" />
     <Content Include="views\contacts.html" />
     <Content Include="views\home.html" />
-    <Content Include="views\mapDrawer\page1.html" />
-    <Content Include="views\mapDrawer\settings.html" />
-    <Content Include="views\mapDrawer\home.html" />
     <Content Include="views\pcAvailabilityFavoriteList.html" />
     <Content Include="views\pcAvailabilityFullList.html" />
     <Content Include="views\pcAvailabilityLeafletMap.html" />
@@ -197,7 +204,7 @@
     <Folder Include="styles\images\home\" />
     <Folder Include="views\" />
     <Folder Include="Plugins\" />
-    <Folder Include="views\mapDrawer\" />
+    <Folder Include="views\pcClusters\" />
   </ItemGroup>
   <Import Project="$(IceniumTargets)Build.targets" />
   <!--

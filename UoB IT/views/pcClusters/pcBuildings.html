@@ -1,0 +1,14 @@
+<div data-role="view" data-title="PC Clusters" data-layout="back" data-model="models.pcClusters.Buildings" data-show="models.pcClusters.Buildings.onShow">
+    <h1 id="buildingsMainTitle" data-bind="html: title"></h1>
+    <ul id="pcBuildings" data-role="listview" data-template="pcBuildingTemplate"></ul>
+</div>
+
+<script type="text/x-kendo-template" id="pcBuildingTemplate">
+
+    <div onclick="javascript: app.mobile.navigate('/views/pcClusters/settings.html');">
+        <h2><i class="fa fa-university" style="margin-right: 10px;"></i> #: BuildingName # <i class="fa fa-arrow-circle-right" style="margin-left: 30px;"></i></h2> 
+    </div>
+
+
+</script>
+

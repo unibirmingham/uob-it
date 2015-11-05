@@ -48,7 +48,7 @@ app.registerInitialise(function () {
 
 
                             LocalStorageService.StoreOrUpdate(key, { data }).then(function (results) {
-                                resolve(results.data);
+                                resolve(data);
                             }).catch(function (error) {
                                 reject(error);
                             });
@@ -58,13 +58,19 @@ app.registerInitialise(function () {
 
 
             }).catch(function () {
+
                 return new Promise(function (resolve, reject) {
                     return RemoteServiceManager.FetchRemote(url).then(function (data) {
                         return LocalStorageService.StoreOrUpdate(key, { data }).then(function (results) {
-                            resolve(results);
-                        }).catch(function (error) {
-                            reject(error);
+
+                            resolve(data);
+                        }).catch(function (storeError) {
+           
+                            reject(storeError);
                         });
+                    }).catch(function (fetchError) {
+
+                        reject(fetchError);
                     });
                 });
             });

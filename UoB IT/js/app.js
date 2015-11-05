@@ -18,8 +18,14 @@
  */
 var models = {};
 
-var app = {
 
+
+
+
+var app = {
+    back: function () {
+        app.mobile.navigate('#:back');
+    },
     // Application Constructor
     initialize: function () {
         this.bindEvents();

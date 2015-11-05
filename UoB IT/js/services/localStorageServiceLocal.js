@@ -69,12 +69,20 @@ app.registerInitialise(function () {
             return new Promise(function (resolve, reject) {
                 if (typeof (Storage) !== "undefined") {
 
-                    localStorage.setObject(cacheName, item);
+                    if (item == null) {
+                        reject("The item is null");
+                    }
+                    else {
 
-                    if (localStorage.getObject(cacheName))
-                        resolve(item);
-                    else
-                        reject("The item could not be saved");
+                        item.lastUpdated = moment().format("hh:mm:ss");
+
+                        localStorage.setObject(cacheName, item);
+
+                        if (localStorage.getObject(cacheName))
+                            resolve(item);
+                        else
+                            reject("The item could not be saved");
+                    }
                 } else {
                     reject("No localStorage support!");
                 }
@@ -99,6 +107,7 @@ app.registerInitialise(function () {
 
             return new Promise(function (resolve, reject) {
                 if (typeof (Storage) !== "undefined") {
+
 
                     localStorage.setObject(cacheName, item);
 

@@ -28,9 +28,17 @@
     <script src="js/services/remoteServiceManager.js"></script>
     <script src="js/services/locationService.js"></script>
     <script src="js/services/pcClusterService.js"></script>
+  
     <script src="js/services/userRepository.js"></script>
 </head>
 <body id="kendoUiMobileApp">
+
+
+    <div data-role="layout" data-id="home">
+        <header data-role="header"></header>
+
+        <!-- application views will be rendered here -->
+    </div>
 
     <div data-role="layout" data-id="main" data-show="app.onViewChange">
         <header data-role="header">
@@ -44,27 +52,27 @@
     </div>
 
 
-    <div data-role="layout" data-id="map" data-show="app.onViewChange">
-        <header data-role="header">
+    <!-- Back layout -->
+    <div data-role="layout" data-id="back"  data-show="app.onViewChange">
+        <div data-role="header">
             <div data-role="navbar">
+                <a data-click="app.back" data-role="button" data-align="left" data-icon="back" id="global-back"></a>
                 <span data-role="view-title"></span>
-                <a data-role="button" href="#appDrawer" data-rel="drawer" data-align="left" data-icon="burger"></a>
             </div>
-        </header>
+        </div>
 
-        <!-- application views will be rendered here -->
-
+        <footer data-role="footer">
+            <span id="lastUpdated"></span>
+        </footer>
     </div>
 
-
-
-
-
-
-    <div data-role="layout" data-id="home">
-        <header data-role="header"></header>
-
-        <!-- application views will be rendered here -->
+    <div data-role="layout" data-id="" data-show="app.onViewChange">
+        <div data-role="header">
+            <div data-role="navbar">
+                <a data-click="app.back" data-role="button" data-align="left" data-icon="back" id="global-back"></a>
+                <span data-role="view-title"></span>
+            </div>
+        </div>
     </div>
 
     <div id="appDrawer" data-role="drawer" data-title="Navigation" data-swipe-to-open="false"  data-show="app.onViewChange">
@@ -78,11 +86,12 @@
                 <a href="views/home.html" data-icon="home">Home</a>
             </li>
             <li>
-                <a href="views/pcAvailabilityLeafletMap.html" data-icon="contacts">PC Availability</a>
+                <a href="views/pcClusters/pcCampuses.html"><i class="fa fa-desktop"></i>  PC Clusters</a>
             </li>
             <li>
-                <a href="views/pcAvailabilityFullList.html" data-icon="contacts">PC Availability List</a>
+                <a href="views/pcAvailabilityLeafletMap.html" data-icon="contacts">PC Availability</a>
             </li>
+
             <li>
                 <a href="views/pcAvailabilityFullList.html" data-icon="contacts">PC Favorite List</a>
             </li>
@@ -98,7 +107,7 @@
     <script src="js/views/home.js"></script>
     <script src="js/views/settings.js"></script>
     <script src="js/views/leafletMap.js"></script>
-    <script src="js/views/pcAvailabilityFullList.js"></script>
+    <script src="js/views/pcClusters.js"></script>
     <script src="js/views/pcAvailabilityFavoriteList.js"></script>
     <!--Mapping includes-->
     <script src="js/plugins/leaflet.js"></script>

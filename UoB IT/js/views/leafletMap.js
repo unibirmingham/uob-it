@@ -163,7 +163,7 @@ var initialiseMap = function () {
 
 var populateMap = function () {
     PcClusterService.GetNearestPCs(location).then(function (results) {
-
+        console.log(results);
         nearestPcsObjects = results;
 
         if (results) {
