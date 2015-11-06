@@ -16,6 +16,7 @@
     <link href="styles/index.css" rel="stylesheet" />
 
     <script src="js/plugins/moment.min.js"></script>
+    <script src="js/plugins/moment-duration-format.js"></script>
 
     <script src="cordova.js"></script>
     <script src="kendo/js/jquery.min.js"></script>
@@ -51,29 +52,36 @@
         <!-- application views will be rendered here -->
     </div>
 
+    <div data-role="layout" data-id="clusterMain" data-show="app.onViewChange">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+                <a data-role="button" href="#appDrawer" data-rel="drawer" data-align="left" data-icon="burger"></a>
+            </div>
+        </header>
 
-    <!-- Back layout -->
+        <!-- application views will be rendered here -->
+
+        <footer data-role="footer">
+            <span id="lastUpdated" style="float: right; margin-right: 30px;"></span>
+        </footer>
+    </div>
+
+<!-- Back layout -->
     <div data-role="layout" data-id="back"  data-show="app.onViewChange">
         <div data-role="header">
             <div data-role="navbar">
+                <a data-role="button" href="#appDrawer" data-rel="drawer" data-align="left" data-icon="burger"></a>
                 <a data-click="app.back" data-role="button" data-align="left" data-icon="back" id="global-back"></a>
                 <span data-role="view-title"></span>
             </div>
         </div>
 
         <footer data-role="footer">
-            <span id="lastUpdated"></span>
+            <span id="lastUpdated" style="float: right; margin-right: 30px;"></span>
         </footer>
     </div>
 
-    <div data-role="layout" data-id="" data-show="app.onViewChange">
-        <div data-role="header">
-            <div data-role="navbar">
-                <a data-click="app.back" data-role="button" data-align="left" data-icon="back" id="global-back"></a>
-                <span data-role="view-title"></span>
-            </div>
-        </div>
-    </div>
 
     <div id="appDrawer" data-role="drawer" data-title="Navigation" data-swipe-to-open="false"  data-show="app.onViewChange">
         <header data-role="header">

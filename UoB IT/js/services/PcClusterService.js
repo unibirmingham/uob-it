@@ -14,7 +14,7 @@ app.registerInitialise(function () {
             AllPCs: "%PC_CLUSTER_SERVICE_GET_ALL_PCS%",
             Campus: "%PC_CLUSTER_SERVICE_CAMPUS%",
             CampusBuildings: "%PC_CLUSTER_SERVICE_BUILDINGS_{MAPID}%",
-            BuildingClusters: "%PC_CLUSTER_SERVICE_CLUSTERS%"
+            BuildingClusters: "%PC_CLUSTER_SERVICE_CLUSTERS_{BUILDINGID}%"
         };
 
         // List of Service endpoints for Pc Cluster functions
@@ -91,12 +91,74 @@ app.registerInitialise(function () {
                     reject("No building id passed into getBuildingClusters function");
                 }
                 else {
-                    return RemoteServiceManager.FetchRemoteCache(urls.Clusters.replace("{BUILDINGID}", buildingId), cacheKeys.BuildingClusters).then(function (result) {
+                    return RemoteServiceManager.FetchRemoteCache(urls.Clusters.replace("{BUILDINGID}", buildingId), cacheKeys.BuildingClusters.replace("{BUILDINGID}", buildingId)).then(function (result) {
                         resolve(result);
                     }).catch(function (error) {
                         reject(error);
                     });
                 }
+            });
+        });
+
+
+        var fetchAllCampusContent = Promise.method(function () {
+            return new Promise(function (resolve, reject) {
+                //clear all pcCluster items from local storage except for 'near me' items
+                localStorage.removeItem(cacheKeys.Campus);
+
+                var sKey;
+
+                var localStorageCounter = localStorage.length - 1;
+
+                do {
+                    sKey = localStorage.key(localStorageCounter);
+
+                    if (sKey.indexOf("%PC_CLUSTER_SERVICE_BUILDINGS_") > -1 || sKey.indexOf("%PC_CLUSTER_SERVICE_CLUSTERS_") > -1) {
+                        localStorage.removeItem(localStorage.getItem(sKey));
+                        console.log("removed " + sKey);
+                    }
+
+                } while (localStorageCounter--)
+
+                return getCampuses().then(function (campuses) {
+
+                    if (campuses == null || !campuses.length > 0) {
+                        reject("CampusContent could not be populated. An attempt to fetch campuses returned null.")
+                    }
+                    else {
+                        var items = {};
+                        var campusCounter = campuses.length - 1;
+
+                        do {
+                            console.log(campuses[campusCounter].ContentId);
+                            getCampusBuildings(campuses[campusCounter].ContentId).then(function (buildings) {
+
+                                if (buildings != null && buildings.length > 0) {
+                                    var buildingCounter = buildings.length - 1;
+
+                                    do {
+                                        getBuildingClusters(buildings[buildingCounter].ContentId).then(function (clusters) {
+                                            console.log(clusters);
+                                        }).catch(function (clusterFetchError) {
+                                            console.log(clusterFetchError);
+                                        });
+                                    } while (buildingCounter--);
+
+                                }
+
+
+                            }).catch(function (buildingFetchError) {
+                                //how to do multipel rejects - would this cause an issue?? perhaps just append them to a string obj then 
+                            });
+
+                        } while (campusCounter--)
+
+
+                    }
+                }).catch(function (campusFetchError) {
+                    reject(campusFetchError);
+                });
+
             });
         });
 
@@ -130,11 +192,51 @@ app.registerInitialise(function () {
         //todo: finish this!
         var getBuilding = Promise.method(function (buildingId) {
             return new Promise(function (resolve, reject) {
-                var i = 0, items = {}, sKey;
+                /*var i = 0, items = {}, sKey;
                 for (; sKey = window.localStorage.key(i) ; i++) {
                     if (sKey.indexOf("%PC_CLUSTER_SERVICE_BUILDINGS_") > -1) {
                         items[sKey] = window.localStorage.getItem(sKey);
                     }
+                }
+
+                if(items == null || !items.length > 0)
+                {
+                    reject("The requested building could not be found.")
+                }
+                else
+                {
+                    var counter = items.length - 1;
+
+                    var items = {};
+                    do{
+                        
+                    }while(counter--)
+                }*/
+
+            });
+        });
+
+        var calculateCampusPCAvailability = Promise.method(function (campuses) {
+            return new Promise(function (resolve, reject) {
+
+                if (campuses == null || !campuses.length > 0) {
+                    reject("No campuses were passed into the calculateCampusPCAvailability function");
+                }
+                else {
+
+
+                    var counter = campuses.length - 1;
+                    //    getNearestPcsToMe
+                    do {
+                        getCampusBuildings(campuses.ContentId)
+                    } while (counter--);
+
+                    // var i = 0, items = {}, sKey;
+                    /*for (; sKey = window.localStorage.key(i) ; i++) {
+                        if (sKey.indexOf("%PC_CLUSTER_SERVICE_BUILDINGS_") > -1) {
+                            items[sKey] = window.localStorage.getItem(sKey);
+                        }
+                    }*/
                 }
             });
         });
@@ -151,10 +253,11 @@ app.registerInitialise(function () {
         return {
             GetCampuses: getCampuses,
             GetCampusBuildings: getCampusBuildings,
-            getBuildingClusters: getBuildingClusters,
+            GetBuildingClusters: getBuildingClusters,
             GetNearestPCs: getNearestPcsToMe,
             GetCampus: getCampus,
-
+            FetchAllCampusContent: fetchAllCampusContent,
+            GetBuilding: getBuilding,
             RefreshData: forceRefresh,
             CacheKeys: cacheKeys
         }

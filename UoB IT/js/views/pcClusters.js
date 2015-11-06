@@ -15,27 +15,42 @@ models.pcClusters = kendo.observable({
 
 models.pcClusters.Campuses = {
     title: "Campuses",
-    dataSource: new kendo.data.DataSource({
-        type: 'json',
-        transport: {
-            read: function (options) {
-              
-                PcClusterService.GetCampuses().then(function (campusData) {
+    onShow: function () {
 
-                    options.success(campusData);
+        models.pcClusters.Campuses.dataSource = new kendo.data.DataSource({
+            type: 'json',
+            transport: {
+                read: function(options) {
 
-                    }).catch(function (pcFetchError) {
+                    PcClusterService.GetCampuses().then(function(campuses) {
+                 
+                        $("#lastUpdated").html("last updated " + moment.duration(moment().utc().diff(campuses.lastUpdated), "minutes").humanize());
+
+                        options.success(campuses.data);
+                        
+                    }).catch(function(pcFetchError) {
                         options.error(pcFetchError);
                     });
+                }
             }
-        }
-    })
+        });
+    
+        $("#pcCampuses").data("kendoMobileListView").setDataSource(models.pcClusters.Campuses.dataSource);
+       
+
+       /* PcClusterService.FetchAllCampusContent().then(function (campuses) {
+            console.log("here!");
+        }).catch(function (error) {
+            console.log(error);
+        });*/
+    }
 };
 
 models.pcClusters.Buildings = {
     selectedBuildingId: -1,
     title: "Buildings",
     onShow: function (e) {
+
         var campusId = e.view.params.campusId;
 
         if (campusId) {
@@ -65,6 +80,46 @@ models.pcClusters.Buildings = {
         }
         else
         {
+            //display an error!
+        }
+
+
+    }
+};
+
+
+models.pcClusters.Clusters = {
+    selectedBuildingId: -1,
+    title: "Clusters",
+    onShow: function (e) {
+        var buildingId = e.view.params.buildingId;
+
+        if (buildingId) {
+            models.pcClusters.Clusters.dataSource = new kendo.data.DataSource({
+                type: 'json',
+                transport: {
+                    read: function (options) {
+                        PcClusterService.GetBuildingClusters(buildingId).then(function (clusterData) {
+                            options.success(clusterData);
+                        }).catch(function (pcFetchError) {
+                            options.error(pcFetchError);
+                        });
+
+                    }
+                }
+            });
+
+          /*  PcClusterService.GetCampus(campusId).then(function (campus) {
+                $("#buildingsMainTitle").append(" <span style='font-size: smaller;'>(" + campus.MapName + ")</span>");
+            }).catch(function (nameError) {
+                console.log(nameError);
+            });*/
+
+            //because we need a passed in param to fetch the correct building data, we need to have the datasource definition
+            //in onShow, then we manually bind the result to the correct template control
+            $("#pcClusters").data("kendoMobileListView").setDataSource(models.pcClusters.Clusters.dataSource);
+        }
+        else {
             //display an error!
         }
 

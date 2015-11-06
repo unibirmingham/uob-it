@@ -38,7 +38,8 @@ app.registerInitialise(function () {
 
                 return new Promise(function (resolve, reject) {
                     if (storedData != null && !ignoreLocal) {
-                        resolve(storedData.data);
+                      
+                        resolve(storedData);
                     } else {
 
                         if (ignoreLocal)
@@ -57,8 +58,8 @@ app.registerInitialise(function () {
                 });
 
 
-            }).catch(function () {
-
+            }).catch(function (error) {
+        
                 return new Promise(function (resolve, reject) {
                     return RemoteServiceManager.FetchRemote(url).then(function (data) {
                         return LocalStorageService.StoreOrUpdate(key, { data }).then(function (results) {

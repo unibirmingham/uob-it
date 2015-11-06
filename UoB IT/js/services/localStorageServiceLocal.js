@@ -74,8 +74,8 @@ app.registerInitialise(function () {
                     }
                     else {
 
-                        item.lastUpdated = moment().format("hh:mm:ss");
-
+                        item.lastUpdated = moment().utc();
+                  
                         localStorage.setObject(cacheName, item);
 
                         if (localStorage.getObject(cacheName))

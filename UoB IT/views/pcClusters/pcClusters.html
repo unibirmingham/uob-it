@@ -1,12 +1,28 @@
-<div data-role="view" data-title="PC Clusters" data-layout="back" data-model="models.pcClusters.Buildings" data-show="models.pcClusters.Buildings.onShow">
-    <h1 id="buildingsMainTitle" data-bind="html: title"></h1>
-    <ul id="pcBuildings" data-role="listview" data-template="pcBuildingTemplate"></ul>
+<div data-role="view" data-title="PC Clusters" data-layout="back" data-model="models.pcClusters.Clusters" data-show="models.pcClusters.Clusters.onShow" data-reload="true">
+    <h1 id="clustersMainTitle" data-bind="html: title"></h1>
+    <ul id="pcClusters" data-role="listview" data-template="pcClusterTemplate"></ul>
 </div>
 
-<script type="text/x-kendo-template" id="pcBuildingTemplate">
+<script type="text/x-kendo-template" id="pcClusterTemplate">
 
-    <div onclick="javascript: app.mobile.navigate('/views/settings.html');">
-        <h2><i class="fa fa-university" style="margin-right: 10px;"></i> #: BuildingName # <i class="fa fa-arrow-circle-right" style="margin-left: 30px;"></i></h2> 
+    <div>
+        <h2><i class="fa fa-university" style="margin-right: 10px;"></i> #: FacilityName #</h2>
+        <div>
+           
+            # if(NoOfPcsFree == 0) { #
+
+            <i class="fa fa-desktop" style="margin-right: 10px; color: red;"></i>
+            <span style="color: red;"> #: NoOfPcsFree # PCs free </span>
+
+            # } else { #
+
+            <i class="fa fa-desktop" style="margin-right: 10px; color: green;"></i>
+            <span style="color: green;"> #: NoOfPcsFree # PCs free </span>
+
+            #} #
+
+
+        </div>
     </div>
 
 
