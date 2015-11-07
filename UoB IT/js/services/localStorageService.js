@@ -12,7 +12,7 @@ var LocalStorageService;
 //todo: look into fallback to localstorage, see here: http://pouchdb.com/adapters.html
 
 app.registerInitialise(function () {
-
+    alert("LocalStorageService");
     LocalStorageService = (function () {
 
         //PouchDB('UoBITApp').destroy();

@@ -6,7 +6,6 @@
 var RemoteServiceManager;
 
 app.registerInitialise(function () {
-
     RemoteServiceManager = (function() {
 
         var forceRefreshKeys = {};
@@ -45,11 +44,11 @@ app.registerInitialise(function () {
                         if (ignoreLocal)
                             ignoreLocal = false;
 
-                        return RemoteServiceManager.FetchRemote(url).then(function (data) {
+                        return getDataRemote(url).then(function (data) {
 
 
-                            LocalStorageService.StoreOrUpdate(key, { data }).then(function (results) {
-                                resolve(data);
+                            return LocalStorageService.StoreOrUpdate(key, { data }).then(function (results) {
+                                resolve(results);
                             }).catch(function (error) {
                                 reject(error);
                             });
@@ -61,10 +60,10 @@ app.registerInitialise(function () {
             }).catch(function (error) {
         
                 return new Promise(function (resolve, reject) {
-                    return RemoteServiceManager.FetchRemote(url).then(function (data) {
+                    return getDataRemote(url).then(function (data) {
                         return LocalStorageService.StoreOrUpdate(key, { data }).then(function (results) {
 
-                            resolve(data);
+                            resolve(results);
                         }).catch(function (storeError) {
            
                             reject(storeError);

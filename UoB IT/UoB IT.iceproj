@@ -48,11 +48,11 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="js\services\locationService.js" />
-    <Content Include="js\services\pcClusterService.js">
-      <SubType>Content</SubType>
-    </Content>
+    <Content Include="js\services\PcClusterService.js" />
     <Content Include="js\services\pocketGuideRepository.js" />
-    <Content Include="js\services\remoteServiceManager.js" />
+    <Content Include="js\services\remoteServiceManager.js">
+      <Publish>False</Publish>
+    </Content>
     <Content Include="js\services\userRepository.js" />
     <Content Include="js\views\leafletMap.js" />
     <Content Include="js\plugins\leaflet-routing-machine.js" />

@@ -89,6 +89,7 @@ var app = {
             var length = app.registerInitialiseCB.length - 1;
 
             do {
+                console.log(app.registerInitialiseCB[length]);
                 app.registerInitialiseCB[length]();
             } while (length--);
         }

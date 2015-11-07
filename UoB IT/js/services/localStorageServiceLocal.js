@@ -74,10 +74,10 @@ app.registerInitialise(function () {
                     }
                     else {
 
-                        item.lastUpdated = moment().utc();
+                        item.lastUpdated = moment();
                   
                         localStorage.setObject(cacheName, item);
-
+                        console.log(item);
                         if (localStorage.getObject(cacheName))
                             resolve(item);
                         else

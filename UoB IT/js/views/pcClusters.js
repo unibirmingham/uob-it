@@ -12,6 +12,9 @@ models.pcClusters = kendo.observable({
     }
 });
 
+models.pcClusters.displayLastUpdated = function(lastUpdated) {
+    $("#lastUpdated").html("last updated " + moment.duration(moment(lastUpdated).diff(moment())).humanize() + " ago");
+};
 
 models.pcClusters.Campuses = {
     title: "Campuses",
@@ -22,13 +25,14 @@ models.pcClusters.Campuses = {
             transport: {
                 read: function(options) {
 
-                    PcClusterService.GetCampuses().then(function(campuses) {
-                 
-                        $("#lastUpdated").html("last updated " + moment.duration(moment().utc().diff(campuses.lastUpdated), "minutes").humanize());
+                    PcClusterService.GetCampuses().then(function (campuses) {
+                        alert(campuses);
+                        models.pcClusters.displayLastUpdated(campuses.lastUpdated);
 
                         options.success(campuses.data);
                         
-                    }).catch(function(pcFetchError) {
+                    }).catch(function (pcFetchError) {
+                        alert(pcFetchError);
                         options.error(pcFetchError);
                     });
                 }
@@ -38,7 +42,7 @@ models.pcClusters.Campuses = {
         $("#pcCampuses").data("kendoMobileListView").setDataSource(models.pcClusters.Campuses.dataSource);
        
 
-       /* PcClusterService.FetchAllCampusContent().then(function (campuses) {
+      /*  PcClusterService.FetchAllCampusContent().then(function (campuses) {
             console.log("here!");
         }).catch(function (error) {
             console.log(error);
@@ -59,7 +63,13 @@ models.pcClusters.Buildings = {
                 transport: {
                     read: function (options) {
                         PcClusterService.GetCampusBuildings(campusId).then(function (buildingData) {
-                            options.success(buildingData);
+
+                            models.pcClusters.displayLastUpdated(buildingData.lastUpdated);
+                            console.log(buildingData.lastUpdated);
+
+                            options.success(buildingData.data);
+
+
                         }).catch(function (pcFetchError) {
                             options.error(pcFetchError);
                         });
@@ -68,11 +78,11 @@ models.pcClusters.Buildings = {
                 }
             });
 
-            PcClusterService.GetCampus(campusId).then(function (campus) {
+          /*  PcClusterService.GetCampus(campusId).then(function (campus) {
                 $("#buildingsMainTitle").append(" <span style='font-size: smaller;'>(" + campus.MapName + ")</span>");
             }).catch(function (nameError) {
                 console.log(nameError);
-            });
+            });*/
 
             //because we need a passed in param to fetch the correct building data, we need to have the datasource definition
             //in onShow, then we manually bind the result to the correct template control
@@ -93,15 +103,19 @@ models.pcClusters.Clusters = {
     title: "Clusters",
     onShow: function (e) {
         var buildingId = e.view.params.buildingId;
-
+        
         if (buildingId) {
             models.pcClusters.Clusters.dataSource = new kendo.data.DataSource({
                 type: 'json',
                 transport: {
                     read: function (options) {
                         PcClusterService.GetBuildingClusters(buildingId).then(function (clusterData) {
-                            options.success(clusterData);
+
+                            models.pcClusters.displayLastUpdated(clusterData.lastUpdated);
+                          
+                            options.success(clusterData.data);
                         }).catch(function (pcFetchError) {
+                   
                             options.error(pcFetchError);
                         });
 

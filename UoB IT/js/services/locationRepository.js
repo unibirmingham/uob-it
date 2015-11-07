@@ -6,7 +6,7 @@
 var LocationRepository;
 
 app.registerInitialise(function () {
-
+   
     LocationRepository = (function () {
 
         //default location coords which point to the center of campus

@@ -58,6 +58,8 @@ app.registerInitialise(function () {
         var getCampuses = Promise.method(function () {
             return new Promise(function (resolve, reject) {
                 return RemoteServiceManager.FetchRemoteCache(urls.Campus, cacheKeys.Campus).then(function (result) {
+
+                    console.log(result);
                     resolve(result);
                 }).catch(function (error) {
                     reject(error);
