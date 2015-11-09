@@ -26,16 +26,19 @@ models.pcClusters.Campuses = {
                 read: function(options) {
 
                     PcClusterService.GetCampuses().then(function (campuses) {
-                        alert(campuses);
+                        //alert(campuses);
                         models.pcClusters.displayLastUpdated(campuses.lastUpdated);
 
                         options.success(campuses.data);
                         
                     }).catch(function (pcFetchError) {
-                        alert(pcFetchError);
+                       // alert(pcFetchError);
                         options.error(pcFetchError);
                     });
                 }
+            },
+            error: function (e) {
+                console.log(e);
             }
         });
     

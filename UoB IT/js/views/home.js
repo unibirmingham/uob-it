@@ -1,7 +1,7 @@
 'use strict';
 
 app.registerPostInitialise(function() {
-    LocationService.RefreshData(LocationService.CacheKeys.AllPCs);
+    //LocationService.RefreshData(LocationService.CacheKeys.AllPCs);
 });
 
 models.home = kendo.observable({
@@ -17,7 +17,7 @@ models.home = kendo.observable({
         // });
    //     var obj = { stuff: "dfsfdsdfsdfsdsf" }
      //   LocalStorageService.StoreOrUpdate("dfsfddddsdfs", obj);
-    },
-    title: "gggg"
+    }//,
+   // title: "gggg"
 });
 
