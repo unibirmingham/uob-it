@@ -45,11 +45,11 @@ models.pcClusters.Campuses = {
         $("#pcCampuses").data("kendoMobileListView").setDataSource(models.pcClusters.Campuses.dataSource);
        
 
-      /*  PcClusterService.FetchAllCampusContent().then(function (campuses) {
-            console.log("here!");
+        PcClusterService.GeneratePcCounts().then(function (campuses) {  //GetCampusPcCounts()
+            console.log(campuses);
         }).catch(function (error) {
             console.log(error);
-        });*/
+        });
     }
 };
 

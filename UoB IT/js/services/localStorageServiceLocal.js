@@ -40,7 +40,7 @@ app.registerInitialise(function () {
 
         //fetches all items with the unique identifier.
         var getItems = Promise.method(function (cacheName) {
-
+            //TODO: update this to fetch based on partial key, returning all items in a holder object
             return new Promise(function (resolve, reject) {
                 if (typeof (Storage) !== "undefined") {
                     var item = localStorage.getObject(cacheName);
@@ -61,10 +61,15 @@ app.registerInitialise(function () {
         //takes an item and firsts checks to see if we can place it in 
         //local db. If not, and the returned failure is 409 (item exists),
         //we do an update on the item instead.
-        var storeOrUpdate = Promise.method(function (cacheName, item) {
+        var storeOrUpdate = Promise.method(function (cacheName, item, addition) {
 
             if (item._id == undefined)
                 item._id = cacheName;
+
+            if (addition) {
+                item.addition = addition;
+                //  console.log(data.addition);
+            }
 
             return new Promise(function (resolve, reject) {
                 if (typeof (Storage) !== "undefined") {
@@ -77,9 +82,10 @@ app.registerInitialise(function () {
                         item.lastUpdated = moment();
                   
                         localStorage.setObject(cacheName, item);
-                        console.log(item);
-                        if (localStorage.getObject(cacheName))
-                            resolve(item);
+                        //      console.log(item);
+                        var storedItem = localStorage.getObject(cacheName);
+                        if (storedItem)
+                            resolve(storedItem);
                         else
                             reject("The item could not be saved");
                     }
@@ -142,8 +148,7 @@ app.registerInitialise(function () {
                 }
             });
         });
-
-
+        
         var removeItem = Promise.method(function (item) {
             return new Promise(function (resolve, reject) {
                 if (!item._id) {
@@ -152,12 +157,44 @@ app.registerInitialise(function () {
                     if (typeof (Storage) !== "undefined") {
 
                         localStorage.removeItem(item._id);
-
+                       
                         if (localStorage.getObject(item._id))
                             resolve("Item was successfully removed from Cache.");
                         else
                             reject("An error occurred. The item was not removed from cache.");
                     } else {
+                        reject("No localStorage support!");
+                    }
+                }
+            });
+        });
+
+        var removeItemsByKey = Promise.method(function (key) {
+            return new Promise(function (resolve, reject) {
+                if (!key) {
+                    reject("No key was passed into 'removeItemsByKey' function");
+                }
+                else {
+                    var sKey;
+                    if (typeof (Storage) !== "undefined") {
+                        if (localStorage.length > 0) {
+                            var localStorageCounter = localStorage.length - 1;
+
+                            do {
+                                sKey = localStorage.key(localStorageCounter);
+
+                                if (sKey != null && sKey.indexOf(key) > -1) {
+                                    localStorage.removeItem(localStorage.getItem(sKey));
+                                //    console.log("removed " + key);
+                                }
+
+                            } while (localStorageCounter--)
+
+                            resolve("success"); // should this simply return a bool?
+                        }
+                        resolve("localStorage empty - so success");
+                    }
+                    else{
                         reject("No localStorage support!");
                     }
                 }
@@ -181,6 +218,7 @@ app.registerInitialise(function () {
             UpdateItem: updateItem,
             StoreOrUpdate: storeOrUpdate,
             RemoveItem: removeItem,
+            RemoveItemsByKey: removeItemsByKey,
             RecoverItem: recoverItem
         }
 

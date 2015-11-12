@@ -6,7 +6,7 @@
 var RemoteServiceManager;
 
 app.registerInitialise(function () {
-    RemoteServiceManager = (function() {
+    RemoteServiceManager = (function () {
 
         var forceRefreshKeys = {};
 
@@ -24,7 +24,7 @@ app.registerInitialise(function () {
         //Checks local storage for a copy of the desired data, if it doesnt
         //exist, it'll pull it in from the passed in service url
         //and put it to local storage using the defined key
-        var getDataRemoteAndCache = Promise.method(function (url, key) {
+        var getDataRemoteAndCache = Promise.method(function (url, key, addition) {
 
             return LocalStorageService.GetItem(key).then(function (storedData) {
 
@@ -37,7 +37,7 @@ app.registerInitialise(function () {
 
                 return new Promise(function (resolve, reject) {
                     if (storedData != null && !ignoreLocal) {
-                      
+                    
                         resolve(storedData);
                     } else {
 
@@ -45,9 +45,8 @@ app.registerInitialise(function () {
                             ignoreLocal = false;
 
                         return getDataRemote(url).then(function (data) {
-
-
-                            return LocalStorageService.StoreOrUpdate(key, { data }).then(function (results) {
+ 
+                            return LocalStorageService.StoreOrUpdate(key, { data }, addition).then(function (results) {
                                 resolve(results);
                             }).catch(function (error) {
                                 reject(error);
@@ -58,14 +57,15 @@ app.registerInitialise(function () {
 
 
             }).catch(function (error) {
-        
+
                 return new Promise(function (resolve, reject) {
                     return getDataRemote(url).then(function (data) {
-                        return LocalStorageService.StoreOrUpdate(key, { data }).then(function (results) {
 
+                        return LocalStorageService.StoreOrUpdate(key, { data }, addition).then(function (results) {
+                           // console.log(results);
                             resolve(results);
                         }).catch(function (storeError) {
-           
+
                             reject(storeError);
                         });
                     }).catch(function (fetchError) {
