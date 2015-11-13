@@ -107,14 +107,25 @@ app.registerInitialise(function () {
             });
         });
 
-        var parseClusterCounts = Promise.method(function (pcCounts) {
-            return new Promise(function(resolve, reject) {
-                // return { blah: 2 };
-                console.log(pcCounts);
+        var parseCampusCounts = Promise.method(function (pcCounts) {
+            return new Promise(function (resolve, reject) {
+
+                var clusterCounts = {};
+                clusterCounts.Clusters = {};
+
                 if (pcCounts && pcCounts.Campuses && pcCounts.Campuses) {
                     for (var key in pcCounts.Campuses) {
-                        console.log(pcCounts.Campuses);
+
+                        clusterCounts.Clusters[key] = { AvailablePCs: 0, NumberOfBuildings: 0 };
+                        clusterCounts.Clusters[key].AvailablePCs = pcCounts.Campuses[key].PcCount;
+                        clusterCounts.Clusters[key].NumberOfBuildings = pcCounts.Campuses[key].BuildingCount;
                     }
+
+                    resolve(clusterCounts);
+                }
+                else
+                {
+                    reject("Cluster count data could not be parsed");
                 }
             });
 
@@ -123,10 +134,13 @@ app.registerInitialise(function () {
         // This is a bit of a heavy function. It parses the entire cluster service tree, calling every
         // building and cluster service. This is currently the only way to create available PC totals
         // at both the cluster and building level. To force a refresh of all cluster data, we remove
-        // all cache items pertaining to clusters
+        // all cache items pertaining to clusters.
+        // We have to use Promise.each to force all promises to be resolved before resolving pcCount object, if we
+        // don't do this, the pcCount object gets Json.stringified to localStorage before it has fully resolved,
+        // consequently storing a broken empty object
         var generatePcCounts = Promise.method(function () {
             return new Promise(function (resolve, reject) {
-                //clear all pcCluster items from local storage except for 'near me' items
+                //todo: do we need to clear out campus and building data? This is very unlikely to change frequently
                 LocalStorageService.RemoveItemsByKey(cacheKeys.Campus);
                 LocalStorageService.RemoveItemsByKey("%PC_CLUSTER_SERVICE_BUILDINGS_");
                 LocalStorageService.RemoveItemsByKey("%PC_CLUSTER_SERVICE_CLUSTERS_");
@@ -139,84 +153,66 @@ app.registerInitialise(function () {
                         reject("CampusContent could not be populated. An attempt to fetch campuses returned null.")
                     }
                     else {
-                     //   var items = {};
-
-                        var campusCounter = campuses.data.length - 1;
+      
                         pcCounts.Campuses = {};
-                        do {
+                        return Promise.each(campuses.data, function (campus) {
 
+                            pcCounts.Campuses[campus.ContentId] = { PcCount: 0, BuildingCount: 0, Buildings: {} };
 
-                            var campus = campuses.data[campusCounter];
-                            pcCounts.Campuses[campus.ContentId] = { PcCount: 0, Buildings: {} };
+                            return getCampusBuildings(campus.ContentId).then(function (building) {
+                                return Promise.each(building.data, function (building) {
 
-                            getCampusBuildings(campus.ContentId).then(function (buildings) {
+                                    pcCounts.Campuses[campus.ContentId].BuildingCount++;
+                                    pcCounts.Campuses[campus.ContentId].Buildings[building.ContentId] = { PcCount: 0, ClusterCount: 0, Clusters: {} };
 
-                                if (buildings != null && buildings.data != null && buildings.data.length > 0) {
-                                    var buildingCounter = buildings.data.length - 1;
+                                    return getBuildingClusters(building.ContentId).then(function (cluster) {
 
-                                    do {
-                                        var building = buildings.data[buildingCounter];
-                                      
-                                        pcCounts.Campuses[buildings.addition].Buildings[building.ContentId] = { PcCount: 0, Clusters: {} };
-                                      
-                                        getBuildingClusters(building.ContentId).then(function (clusters) {
-                                            if (clusters != null && clusters.data != null && clusters.data.length > 0) {
-                                                var clusterCounter = clusters.data.length - 1;
+                                        var freePcsCount = 0;
 
-                                                var freePcsCount = 0;
+                                        return Promise.each(cluster.data, function (cluster) {
 
-                                                do {
-                                                    var cluster = clusters.data[clusterCounter];
-                                                    pcCounts.Campuses[buildings.addition].Buildings[clusters.addition].Clusters[cluster.ContentId] = { PcCount: cluster.NoOfPcsFree };
+                                            pcCounts.Campuses[campus.ContentId].Buildings[building.ContentId].Clusters[cluster.ContentId] = { PcCount: cluster.NoOfPcsFree };
+                                            pcCounts.Campuses[campus.ContentId].Buildings[building.ContentId].ClusterCount++;
 
-                                                    freePcsCount += cluster.NoOfPcsFree;
-
-                                                } while (clusterCounter--)
-                                                pcCounts.Campuses[buildings.addition].PcCount += freePcsCount;
-                                                pcCounts.Campuses[buildings.addition].Buildings[clusters.addition].PcCount += freePcsCount;
-
-                                            }
-                                            else {
-                                                reject("Cluster data could not be populated for all clusters.");
-                                            }
-
-                                        }).catch(function (clusterFetchError) {
-                                            reject(clusterFetchError);
+                                            pcCounts.Campuses[campus.ContentId].PcCount += cluster.NoOfPcsFree;
+                                            pcCounts.Campuses[campus.ContentId].Buildings[building.ContentId].PcCount += cluster.NoOfPcsFree;
                                         });
-                                    } while (buildingCounter--);
 
-                                }
-                            }).catch(function (buildingFetchError) {
-                                //how to do multiple rejects - would this cause an issue?? perhaps just append them to a string obj then 
-                                reject(buildingFetchError);
+                                    });
+                                });
                             });
 
-                        } while (campusCounter--)
+                        }).then(function () {
+                            resolve(pcCounts);
+                        });
                     }
                 }).then(function () {
-                    resolve(pcCounts);
+
+                   
                 }).catch(function (campusFetchError) {
                     reject(campusFetchError);
                 });
 
+
+
             });
         });
-
 
         var getCampusPcCounts = Promise.method(function () {
             return new Promise(function (resolve, reject) {
                 return LocalStorageService.GetItem(cacheKeys.PcCounts).then(function (result) {
 
-                    parseClusterCounts(result).then(function(clusterCounts) {
-                        console.log(clusterCounts);
+                    return parseCampusCounts(result).then(function (clusterCounts) {
+                        resolve(clusterCounts);
                     });
                 }).catch(function (fetchError) {
                     //lets repopulate the cache item
                  
                     return generatePcCounts().then(function (pcCounts) {
-                        LocalStorageService.StoreOrUpdate(cacheKeys.PcCounts, pcCounts).then(function (storeResult) {
-                            parseClusterCounts(storeResult).then(function (clusterCounts) {
-                                console.log(clusterCounts);
+                        
+                        return LocalStorageService.StoreOrUpdate(cacheKeys.PcCounts, pcCounts).then(function (storeResult) {
+                            return parseCampusCounts(storeResult).then(function (clusterCounts) {
+                                resolve(clusterCounts);
                             });
                         }).catch(function(storeError) {
                             reject(storeError);

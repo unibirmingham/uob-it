@@ -39,6 +39,7 @@
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="index.html" />
     <Content Include="js\plugins\blurbird.js" />
+    <Content Include="js\plugins\JSON.prune.js" />
     <Content Include="js\plugins\moment-duration-format.js" />
     <Content Include="js\plugins\moment.min.js" />
     <Content Include="js\plugins\pouchdb.localstorage.min.js" />

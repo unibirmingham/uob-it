@@ -5,7 +5,7 @@
 
 //Add setObject / getObject to localStorage so we don't have to keep parsing and stringifying data for our json objects
 Storage.prototype.setObject = function (key, value) {
-    this.setItem(key, JSON.stringify(value));
+        this.setItem(key, JSON.stringify(value));
 }
 
 Storage.prototype.getObject = function (key) {
@@ -18,7 +18,7 @@ var LocalStorageService;
 
 app.registerInitialise(function () {
     //only for dev! 
-    //localStorage.clear();
+   // localStorage.clear();
     LocalStorageService = (function () {
 
         var getItem = Promise.method(function (cacheName) {
@@ -26,7 +26,7 @@ app.registerInitialise(function () {
             return new Promise(function (resolve, reject) {
                 if (typeof (Storage) !== "undefined") {
                     var item = localStorage.getObject(cacheName);
-
+                //    console.log(cacheName + " " + item);
                     if (item) {
                         resolve(item);
                     } else {
@@ -74,17 +74,6 @@ app.registerInitialise(function () {
                         reject("No localStorage support!");
                     }
                 }
-                /*if (typeof (Storage) !== "undefined") {
-                    var item = localStorage.getObject(cacheName);
-
-                    if (item) {
-                        resolve(item);
-                    } else {
-                        reject("The requested items could not be found");
-                    }
-                } else {
-                    reject("No localStorage support!");
-                }*/
             });
 
         });
@@ -98,13 +87,16 @@ app.registerInitialise(function () {
             return new Promise(function (resolve, reject) {
                 if (typeof (Storage) !== "undefined") {
 
-
+                 //   console.log(item);
                     localStorage.setObject(cacheName, item);
+                  //  console.log(item);
+                    return getItem(cacheName).then(function (storedItem) {
 
-                    if (localStorage.getObject(cacheName))
-                        resolve(item);
-                    else
-                        reject("The item could not be saved");
+                        resolve(storedItem);
+                    }).catch(function (error) {
+                        reject(error);
+                    });
+
                 } else {
                     reject("No localStorage support!");
                 }
@@ -122,7 +114,6 @@ app.registerInitialise(function () {
 
             if (addition) {
                 item.addition = addition;
-                //  console.log(data.addition);
             }
 
             return new Promise(function (resolve, reject) {

@@ -6,7 +6,8 @@
 <script type="text/x-kendo-template" id="pcCampusesTemplate">
 
     <div onclick="javascript: app.mobile.navigate('/views/pcClusters/pcBuildings.html?campusId=' + #:ContentId#);">
-        <h2><i class="fa fa-university" style="margin-right: 10px;"></i> #: MapName # <i class="fa fa-arrow-circle-right" style="margin-left: 30px;"></i></h2> 
+        <div style="float: left; margin-right: 10px;" id="AvailablePCs">#: AvailablePCs #</div><h2> #: MapName # </h2> 
+        <div id="NumberOfBuildings" style="font-size: small;">#: AvailablePCs # PCs available across #: NumberOfBuildings #   # if(NumberOfBuildings == 1) { # building # } else { # buildings  # } #</div>
     </div>
 
 
