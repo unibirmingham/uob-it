@@ -109,22 +109,22 @@ app.registerInitialise(function () {
 
         var parseCampusCounts = Promise.method(function (pcCounts) {
             return new Promise(function (resolve, reject) {
-                console.log(pcCounts);
-                var clusterCounts = {};
-                clusterCounts.lastUpdated = pcCounts.lastUpdated;
-                clusterCounts.Clusters = {};
+            
+                var campusCounts = {};
+                campusCounts.lastUpdated = pcCounts.lastUpdated;
+                campusCounts.Clusters = {};
 
-                if (pcCounts && pcCounts.Campuses && pcCounts.Campuses) {
+                if (pcCounts && pcCounts.Campuses) {
                     for (var key in pcCounts.Campuses) {
                         if (pcCounts.Campuses.hasOwnProperty(key)) {
 
-                            clusterCounts.Clusters[key] = { AvailablePCs: 0, NumberOfBuildings: 0 };
-                            clusterCounts.Clusters[key].AvailablePCs = pcCounts.Campuses[key].PcCount;
-                            clusterCounts.Clusters[key].NumberOfBuildings = pcCounts.Campuses[key].BuildingCount;
+                            campusCounts.Clusters[key] = { AvailablePCs: 0, NumberOfBuildings: 0 };
+                            campusCounts.Clusters[key].AvailablePCs = pcCounts.Campuses[key].PcCount;
+                            campusCounts.Clusters[key].NumberOfBuildings = pcCounts.Campuses[key].BuildingCount;
                         }
                     }
 
-                    resolve(clusterCounts);
+                    resolve(campusCounts);
                 }
                 else
                 {
@@ -132,6 +132,35 @@ app.registerInitialise(function () {
                 }
             });
 
+        });
+
+        var parseBuildingCounts = Promise.method(function (campusId, pcCounts) {
+            return new Promise(function (resolve, reject) {
+                var buildingCounts = {};
+                buildingCounts.lastUpdated = pcCounts.lastUpdated;
+                buildingCounts.Clusters = {};
+
+                if (pcCounts && pcCounts.Campuses && pcCounts.Campuses[campusId]) {
+
+                    var campus = pcCounts.Campuses[campusId];
+
+                    for (var key in campus.Buildings) {
+                        if (pcCounts.Campuses.hasOwnProperty(key)) {
+
+                            buildingCounts.Clusters[key] = { AvailablePCs: 0};
+                            buildingCounts.Clusters[key].AvailablePCs = pcCounts.Campuses[key].PcCount;
+                            buildingCounts.Clusters[key].NumberOfBuildings = pcCounts.Campuses[key].BuildingCount;
+                        }
+                    }
+
+                    console.log(pcCounts.Campuses[campusId]);
+
+                    resolve(buildingCounts);
+                }
+                else {
+                    reject("Cluster count data could not be parsed");
+                }
+            });
         });
 
         // This is a bit of a heavy function. It parses the entire cluster service tree, calling every
@@ -203,8 +232,10 @@ app.registerInitialise(function () {
             return new Promise(function (resolve, reject) {
                 return LocalStorageService.GetItem(cacheKeys.PcCounts).then(function (result) {
 
-                    return parseCampusCounts(result).then(function (clusterCounts) {
-                        resolve(clusterCounts);
+                    return parseCampusCounts(result).then(function (campusCounts) {
+                        resolve(campusCounts);
+                    }).catch(function(error) {
+                        reject(error);
                     });
                 }).catch(function (fetchError) {
                     //lets repopulate the cache item
@@ -212,10 +243,39 @@ app.registerInitialise(function () {
                     return generatePcCounts().then(function (pcCounts) {
                         
                         return LocalStorageService.StoreOrUpdate(cacheKeys.PcCounts, pcCounts).then(function (storeResult) {
-                            return parseCampusCounts(storeResult).then(function (clusterCounts) {
-                                resolve(clusterCounts);
+                            return parseCampusCounts(storeResult).then(function (campusCounts) {
+                                resolve(campusCounts);
+                            }). catch(function(error) {
+                                reject(error);
                             });
                         }).catch(function(storeError) {
+                            reject(storeError);
+                        });
+                    }).catch(function (pcCountGenerationError) {
+                        reject(pcCountGenerationError);
+                    });
+                });
+            });
+        });
+
+        var getBuildingPcCounts = Promise.method(function(campusId) {
+            return new Promise(function(resolve, reject) {
+                return LocalStorageService.GetItem(cacheKeys.PcCounts).then(function(result) {
+                    return parseBuildingCounts(campusId, result).then(function(buildingCounts) {
+                        resolve(buildingCounts);
+                    }). catch(function(error) {
+                        reject(error);
+                    });
+                }).catch(function() {
+                    return generatePcCounts().then(function (pcCounts) {
+
+                        return LocalStorageService.StoreOrUpdate(cacheKeys.PcCounts, pcCounts).then(function (storeResult) {
+                            return parseBuildingCounts(campusId, storeResult).then(function (buildingCounts) {
+                                resolve(buildingCounts);
+                            }).catch(function (error) {
+                                reject(error);
+                            });
+                        }).catch(function (storeError) {
                             reject(storeError);
                         });
                     }).catch(function (pcCountGenerationError) {
@@ -328,6 +388,7 @@ app.registerInitialise(function () {
             GetNearestPCs: getNearestPcsToMe,
             GetCampus: getCampus,
             GetCampusPcCounts: getCampusPcCounts,
+            GetBuildingPcCounts: getBuildingPcCounts,
             GeneratePcCounts: generatePcCounts,
             GetBuilding: getBuilding,
             RefreshData: forceRefresh,

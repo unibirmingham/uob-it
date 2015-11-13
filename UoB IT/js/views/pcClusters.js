@@ -27,9 +27,6 @@ models.pcClusters.Campuses = {
 
                     PcClusterService.GetCampuses().then(function (campuses) {
 
-                     
-
-                        
                         if (campuses && campuses.data.length > 0) {
                             PcClusterService.GetCampusPcCounts().then(function (counts) {
 
@@ -79,11 +76,6 @@ models.pcClusters.Campuses = {
             }
         });
 
-
-
-
-
-
         $("#pcCampuses").data("kendoMobileListView").setDataSource(models.pcClusters.Campuses.dataSource);
     }
 };
@@ -101,6 +93,9 @@ models.pcClusters.Buildings = {
                 transport: {
                     read: function (options) {
                         PcClusterService.GetCampusBuildings(campusId).then(function (buildingData) {
+
+
+                            PcClusterService.GetBuildingPcCounts(campusId);
 
                             models.pcClusters.displayLastUpdated(buildingData.lastUpdated);
                             console.log(buildingData.lastUpdated);
