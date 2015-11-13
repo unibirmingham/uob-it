@@ -38,11 +38,43 @@ app.registerInitialise(function () {
             });
         });
 
+
+
         //fetches all items with the unique identifier.
-        var getItems = Promise.method(function (cacheName) {
+        var getItems = Promise.method(function (key) {
             //TODO: update this to fetch based on partial key, returning all items in a holder object
             return new Promise(function (resolve, reject) {
-                if (typeof (Storage) !== "undefined") {
+                if (!key) {
+                    reject("No key was passed into 'removeItemsByKey' function");
+                }
+                else {
+                    var sKey;
+                    if (typeof (Storage) !== "undefined") {
+                        if (localStorage.length > 0) {
+                            var localStorageCounter = localStorage.length - 1;
+                            var items = {};
+                            do {
+                                sKey = localStorage.key(localStorageCounter);
+
+                                if (sKey != null && sKey.indexOf(key) > -1) {
+                                    items[sKey] = localStorage.getItem(sKey);
+                                }
+
+                            } while (localStorageCounter--)
+
+                            if (Object.keys(items).length > 0)
+                                resolve(items); 
+                            else
+                                reject("No items could be found with a key containing '" + key + "'");
+                        } else {
+                            reject("localStorage empty.");
+                        }
+                    }
+                    else {
+                        reject("No localStorage support!");
+                    }
+                }
+                /*if (typeof (Storage) !== "undefined") {
                     var item = localStorage.getObject(cacheName);
 
                     if (item) {
@@ -52,9 +84,31 @@ app.registerInitialise(function () {
                     }
                 } else {
                     reject("No localStorage support!");
-                }
+                }*/
             });
 
+        });
+        //Places an item into local db, generating an _id if
+        //the item doesnt have a unique identifier.
+        var setItem = Promise.method(function (cacheName, item) {
+
+            if (item._id == undefined)
+                item._id = cacheName;
+
+            return new Promise(function (resolve, reject) {
+                if (typeof (Storage) !== "undefined") {
+
+
+                    localStorage.setObject(cacheName, item);
+
+                    if (localStorage.getObject(cacheName))
+                        resolve(item);
+                    else
+                        reject("The item could not be saved");
+                } else {
+                    reject("No localStorage support!");
+                }
+            });
         });
 
         //pouch db can either store or update, not overwrite. This function
@@ -80,14 +134,15 @@ app.registerInitialise(function () {
                     else {
 
                         item.lastUpdated = moment();
-                  
-                        localStorage.setObject(cacheName, item);
-                        //      console.log(item);
-                        var storedItem = localStorage.getObject(cacheName);
-                        if (storedItem)
+
+                        return setItem(cacheName, item).then(function (storedItem) {
+                           
                             resolve(storedItem);
-                        else
-                            reject("The item could not be saved");
+                        }).catch(function(error) {
+                            reject(error);
+                        });
+                        
+   
                     }
                 } else {
                     reject("No localStorage support!");
@@ -104,28 +159,6 @@ app.registerInitialise(function () {
             });
         });
 
-        //Places an item into local db, generating an _id if
-        //the item doesnt have a unique identifier.
-        var setItem = Promise.method(function (cacheName, item) {
-
-            if (item._id == undefined)
-                item._id = cacheName;
-
-            return new Promise(function (resolve, reject) {
-                if (typeof (Storage) !== "undefined") {
-
-
-                    localStorage.setObject(cacheName, item);
-
-                    if (localStorage.getObject(cacheName))
-                        resolve(item);
-                    else
-                        reject("The item could not be saved");
-                } else {
-                    reject("No localStorage support!");
-                }
-            });
-        });
 
         //Updates the specified item in the local db
         var updateItem = Promise.method(function (item) {

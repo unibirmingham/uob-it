@@ -12,7 +12,8 @@ models.pcClusters = kendo.observable({
     }
 });
 
-models.pcClusters.displayLastUpdated = function(lastUpdated) {
+models.pcClusters.displayLastUpdated = function (lastUpdated) {
+    console.log(lastUpdated);
     $("#lastUpdated").html("last updated " + moment.duration(moment(lastUpdated).diff(moment())).humanize() + " ago");
 };
 
@@ -45,10 +46,10 @@ models.pcClusters.Campuses = {
         $("#pcCampuses").data("kendoMobileListView").setDataSource(models.pcClusters.Campuses.dataSource);
        
 
-        PcClusterService.GeneratePcCounts().then(function (campuses) {  //GetCampusPcCounts()
+        PcClusterService.GetCampusPcCounts().then(function (campuses) {  //GetCampusPcCounts()
             console.log(campuses);
         }).catch(function (error) {
-            console.log(error);
+          //  console.log(error);
         });
     }
 };
@@ -81,11 +82,13 @@ models.pcClusters.Buildings = {
                 }
             });
 
-          /*  PcClusterService.GetCampus(campusId).then(function (campus) {
-                $("#buildingsMainTitle").append(" <span style='font-size: smaller;'>(" + campus.MapName + ")</span>");
+
+
+            PcClusterService.GetCampus(campusId).then(function (campus) {
+                $("#buildingsMainTitle").html("Buildings <span style='font-size: small;'>(" + campus.MapName + ")</span>");
             }).catch(function (nameError) {
-                console.log(nameError);
-            });*/
+                $("#buildingsMainTitle").html("Buildings");
+            });
 
             //because we need a passed in param to fetch the correct building data, we need to have the datasource definition
             //in onShow, then we manually bind the result to the correct template control
@@ -113,7 +116,7 @@ models.pcClusters.Clusters = {
                 transport: {
                     read: function (options) {
                         PcClusterService.GetBuildingClusters(buildingId).then(function (clusterData) {
-
+                           
                             models.pcClusters.displayLastUpdated(clusterData.lastUpdated);
                           
                             options.success(clusterData.data);
@@ -124,6 +127,13 @@ models.pcClusters.Clusters = {
 
                     }
                 }
+            });
+
+            PcClusterService.GetBuilding(buildingId).then(function(building) {
+                $("#clustersMainTitle").html("Clusters <span style='font-size: small;'>(" + building.BuildingName + ")</span>");
+            }).catch(function (error) {
+               
+                $("#clustersMainTitle").html("Buildings");
             });
 
           /*  PcClusterService.GetCampus(campusId).then(function (campus) {
