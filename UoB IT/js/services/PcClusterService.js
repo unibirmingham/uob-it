@@ -109,16 +109,19 @@ app.registerInitialise(function () {
 
         var parseCampusCounts = Promise.method(function (pcCounts) {
             return new Promise(function (resolve, reject) {
-
+                console.log(pcCounts);
                 var clusterCounts = {};
+                clusterCounts.lastUpdated = pcCounts.lastUpdated;
                 clusterCounts.Clusters = {};
 
                 if (pcCounts && pcCounts.Campuses && pcCounts.Campuses) {
                     for (var key in pcCounts.Campuses) {
+                        if (pcCounts.Campuses.hasOwnProperty(key)) {
 
-                        clusterCounts.Clusters[key] = { AvailablePCs: 0, NumberOfBuildings: 0 };
-                        clusterCounts.Clusters[key].AvailablePCs = pcCounts.Campuses[key].PcCount;
-                        clusterCounts.Clusters[key].NumberOfBuildings = pcCounts.Campuses[key].BuildingCount;
+                            clusterCounts.Clusters[key] = { AvailablePCs: 0, NumberOfBuildings: 0 };
+                            clusterCounts.Clusters[key].AvailablePCs = pcCounts.Campuses[key].PcCount;
+                            clusterCounts.Clusters[key].NumberOfBuildings = pcCounts.Campuses[key].BuildingCount;
+                        }
                     }
 
                     resolve(clusterCounts);
@@ -166,8 +169,6 @@ app.registerInitialise(function () {
                                     pcCounts.Campuses[campus.ContentId].Buildings[building.ContentId] = { PcCount: 0, ClusterCount: 0, Clusters: {} };
 
                                     return getBuildingClusters(building.ContentId).then(function (cluster) {
-
-                                        var freePcsCount = 0;
 
                                         return Promise.each(cluster.data, function (cluster) {
 

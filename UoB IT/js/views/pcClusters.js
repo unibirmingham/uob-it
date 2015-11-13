@@ -27,7 +27,7 @@ models.pcClusters.Campuses = {
 
                     PcClusterService.GetCampuses().then(function (campuses) {
 
-                        models.pcClusters.displayLastUpdated(campuses.lastUpdated);
+                     
 
                         
                         if (campuses && campuses.data.length > 0) {
@@ -39,7 +39,7 @@ models.pcClusters.Campuses = {
 
                                 if (counts && Object.keys(counts.Clusters).length > 0)
                                 {
-
+                                    models.pcClusters.displayLastUpdated(counts.lastUpdated);
                                     var campusCount = campuses.data.length - 1;
 
                                     do {
