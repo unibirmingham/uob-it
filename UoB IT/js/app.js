@@ -37,10 +37,16 @@ var app = {
     back: function () {
         app.mobile.navigate('#:back');
     },
+    isOnline: function() {
+        if (app.hasConnection)
+            return app.hasConnection;
+        else
+            return false;
+    },
     // Application Constructor
     initialize: function () {
         this.bindEvents();
-
+        app.hasConnection = true;
     },
     // Bind Event Listeners
     //
@@ -85,6 +91,7 @@ var app = {
 
         var initialView = 'views/home.html';
 
+        app.hasConnection = true;
 
         app.mobile = new kendo.mobile.Application(document.body, {
             skin: 'flat',
@@ -136,10 +143,15 @@ var app = {
         };
     },
     onDeviceOffline: function () {
-        //  console.log("offline!!");
+        app.receivedEvent('onDeviceOffline');
+        app.hasConnection = false;
+        console.log(app.hasConnection);
     },
     onDeviceOnline: function () {
+        app.receivedEvent('onDeviceOnline');
         //  console.log("online!!");
+        app.hasConnection = true;
+        console.log(app.hasConnection);
     },
     /* pushReceivedEvent: function(item) {
          app.receivedEvent('pushEventReceived');

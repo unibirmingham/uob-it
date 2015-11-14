@@ -6,24 +6,27 @@ app.registerPostInitialise(function() {
 
 models.home = kendo.observable({
     onShow: function () {
-        PcClusterService.GetCampusPcCounts().then(function(counts) {
-            if (counts && Object.keys(counts.Clusters).length > 0) {
-                console.log(counts);
+        console.log(app.isOnline());
+        if (app.isOnline()) {
+            PcClusterService.GetCampusPcCounts().then(function(counts) {
+                if (counts && Object.keys(counts.Clusters).length > 0) {
+                    console.log(counts);
 
-                var totalPcsAvailable = 0;
+                    var totalPcsAvailable = 0;
 
-                for (var key in counts.Clusters) {
-                    if (counts.Clusters.hasOwnProperty(key)) {
-                        totalPcsAvailable += counts.Clusters[key].AvailablePCs;
-                       
-                    }
-                };
+                    for (var key in counts.Clusters) {
+                        if (counts.Clusters.hasOwnProperty(key)) {
+                            totalPcsAvailable += counts.Clusters[key].AvailablePCs;
 
-                $("#homePcCount").html(totalPcsAvailable);
-            }
-        }).catch(function(error) {
-            
-        });
+                        }
+                    };
+
+                    $("#homePcCount").html(totalPcsAvailable);
+                }
+            }).catch(function(error) {
+
+            });
+        }
         // setResidence(app.data.residence);
 
         // $("#home-logo").one("load", function() {
