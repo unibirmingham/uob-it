@@ -37,6 +37,7 @@ models.pcClusters.Campuses = {
                                 if (counts && Object.keys(counts.Clusters).length > 0)
                                 {
                                     models.pcClusters.displayLastUpdated(counts.lastUpdated);
+
                                     var campusCount = campuses.data.length - 1;
 
                                     do {
@@ -92,16 +93,41 @@ models.pcClusters.Buildings = {
                 type: 'json',
                 transport: {
                     read: function (options) {
-                        PcClusterService.GetCampusBuildings(campusId).then(function (buildingData) {
+                        PcClusterService.GetCampusBuildings(campusId).then(function (buildings) {
+                           
+                            if (buildings && buildings.data.length > 0) {
+                                PcClusterService.GetBuildingPcCounts(campusId).then(function(counts) {
+                                
+                                    if (counts && Object.keys(counts.Clusters).length > 0) {
+
+                                        models.pcClusters.displayLastUpdated(counts.lastUpdated);
+
+                                        var buildingsCount = buildings.data.length - 1;
+
+                                        do {
+
+                                            buildings.data[buildingsCount].AvailablePCs = 0;
+                                            buildings.data[buildingsCount].NumberOfClusters = 0;
+                                            var currentCount = counts.Clusters[buildings.data[buildingsCount].ContentId];
+
+                                            if (currentCount) {
+                                                buildings.data[buildingsCount].AvailablePCs = currentCount.AvailablePCs;
+                                                buildings.data[buildingsCount].NumberOfClusters = currentCount.NumberOfClusters;
+
+                                            }
+                                        } while (buildingsCount--);
 
 
-                            PcClusterService.GetBuildingPcCounts(campusId);
+                                        options.success(buildings.data);
+                                    }
+                                    else {
+                                        options.success(buildings.data);
+                                    }
 
-                            models.pcClusters.displayLastUpdated(buildingData.lastUpdated);
-                            console.log(buildingData.lastUpdated);
-
-                            options.success(buildingData.data);
-
+                                }).catch(function (error) {
+                                    console.log(error);
+                                });
+                            }
 
                         }).catch(function (pcFetchError) {
                             options.error(pcFetchError);

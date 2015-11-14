@@ -1,3 +1,13 @@
+<style>
+    .home-pc-count-text {
+        color: white;
+        margin-top: -18px;
+        padding-left: 7px;
+        font-size: 0.6em;
+
+
+    }
+</style>
 <div id="home-view" data-role="view" data-title="Home" data-layout="home" data-model="models.home" data-show="models.home.onShow" data-stretch="true">
     <div id="home-container">
         <div id="logo-container">
@@ -6,9 +16,13 @@
         </div>
         <div id="icons-container">
             <a href="views/pcClusters/pcCampuses.html" class="home-icon" data-role="button">
-                <i class="fa fa-desktop fa-5x" style="color: white;"></i>
+                <span class="fa-stack fa-3x">
+                    <i class="fa fa-desktop fa-5x fa-stack-2x" style="color: white;"></i>
+                    <strong class="fa-stack-1x home-pc-count-text" id="homePcCount"></strong>
+                </span>
+
                 <div class="title">
-                    PC Clusters
+                    PC Availability
                 </div>
             </a>
             <a href="views/pcAvailabilityLeafletMap.html" class="home-icon" data-role="button">

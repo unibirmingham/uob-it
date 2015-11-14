@@ -6,7 +6,24 @@ app.registerPostInitialise(function() {
 
 models.home = kendo.observable({
     onShow: function () {
-        
+        PcClusterService.GetCampusPcCounts().then(function(counts) {
+            if (counts && Object.keys(counts.Clusters).length > 0) {
+                console.log(counts);
+
+                var totalPcsAvailable = 0;
+
+                for (var key in counts.Clusters) {
+                    if (counts.Clusters.hasOwnProperty(key)) {
+                        totalPcsAvailable += counts.Clusters[key].AvailablePCs;
+                       
+                    }
+                };
+
+                $("#homePcCount").html(totalPcsAvailable);
+            }
+        }).catch(function(error) {
+            
+        });
         // setResidence(app.data.residence);
 
         // $("#home-logo").one("load", function() {
@@ -15,8 +32,8 @@ models.home = kendo.observable({
         //  }).each(function() {
         // 	if(this.complete) $(this).load();
         // });
-   //     var obj = { stuff: "dfsfdsdfsdfsdsf" }
-     //   LocalStorageService.StoreOrUpdate("dfsfddddsdfs", obj);
+        //     var obj = { stuff: "dfsfdsdfsdfsdsf" }
+        //   LocalStorageService.StoreOrUpdate("dfsfddddsdfs", obj);
     }//,
    // title: "gggg"
 });

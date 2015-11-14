@@ -107,6 +107,8 @@ app.registerInitialise(function () {
             });
         });
 
+
+
         var parseCampusCounts = Promise.method(function (pcCounts) {
             return new Promise(function (resolve, reject) {
             
@@ -145,17 +147,40 @@ app.registerInitialise(function () {
                     var campus = pcCounts.Campuses[campusId];
 
                     for (var key in campus.Buildings) {
-                        if (pcCounts.Campuses.hasOwnProperty(key)) {
-
-                            buildingCounts.Clusters[key] = { AvailablePCs: 0};
-                            buildingCounts.Clusters[key].AvailablePCs = pcCounts.Campuses[key].PcCount;
-                            buildingCounts.Clusters[key].NumberOfBuildings = pcCounts.Campuses[key].BuildingCount;
+                        if (campus.Buildings.hasOwnProperty(key)) {
+                            buildingCounts.Clusters[key] = { AvailablePCs: 0, NumberOfClusters: 0 };
+                            buildingCounts.Clusters[key].AvailablePCs = campus.Buildings[key].PcCount;
+                            buildingCounts.Clusters[key].NumberOfClusters = campus.Buildings[key].ClusterCount;
                         }
                     }
 
-                    console.log(pcCounts.Campuses[campusId]);
-
                     resolve(buildingCounts);
+                }
+                else {
+                    reject("Cluster count data could not be parsed");
+                }
+            });
+        });
+
+        var parseClusterCounts = Promise.method(function (buildingId, pcCounts) {
+            return new Promise(function (resolve, reject) {
+                var clusterCounts = {};
+                clusterCounts.lastUpdated = pcCounts.lastUpdated;
+                clusterCounts.Cluster = {};
+                //todo: need to get building, perhaps loops through all campus buildings??
+                if (pcCounts && pcCounts.Campuses && pcCounts.Campuses[campusId]) {
+
+                    var campus = pcCounts.Campuses[campusId];
+
+                    for (var key in campus.Buildings) {
+                        if (campus.Buildings.hasOwnProperty(key)) {
+                            clusterCounts.Clusters[key] = { AvailablePCs: 0, NumberOfClusters: 0 };
+                            clusterCounts.Clusters[key].AvailablePCs = campus.Buildings[key].PcCount;
+                            
+                        }
+                    }
+
+                    resolve(clusterCounts);
                 }
                 else {
                     reject("Cluster count data could not be parsed");
