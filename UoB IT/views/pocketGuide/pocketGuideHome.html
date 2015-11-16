@@ -1,0 +1,10 @@
+<div data-role="view" data-title="Pocket Guide" data-layout="main" data-model="APP.models.guide">
+    <ul data-role="listview" data-style="inset" data-template="guideTemplate" data-bind="source: ds"></ul>
+</div>
+
+<script type="text/x-kendo-tmpl" id="guideTemplate">
+    #if (pageFunction === "page") {#
+    <span data-icon="${icon}"><a href="views/guide-page.html?id=${id}">${pageTitle}</a></span>
+    #}#
+</script>
+

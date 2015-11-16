@@ -229,63 +229,18 @@ h1 {
     margin: 0;
     margin-left: -7px;
 }
-/* Customer Services Manager */
 
-.customer-services-manager-row img {
-    float: left;
-    width: 30%;
-    padding-right: 10px;
-    max-width: 100px;
-}
-.customer-services-manager-row .details {
-    float: left;
-    width: 70%;
-    padding-right: 20px;
-}
-.customer-services-manager-row .name {
-    margin: 0;
-    margin-top: 5px;
-    margin-bottom: 6px;
-    font-size: 20px;
-    padding-bottom: 4px;
-    border-bottom: 1px solid #efefef;
-}
-.customer-services-manager-row .area {
-    margin-top: 5px;
-    margin: 0;
-    font-size: 15px;
-    color: #888
-}
-@media (min-width: 400px) {
-    .customer-services-manager-row .name {
-        font-size: 24px;
-    }
-    .customer-services-manager-row .area {
-        font-size: 18px;
-    }
-}
 #home-view .km-content {
     background-color: #A84D97;
 }
-#residence-button {
-    background-color: white;
-    color: #A84D97;
-    display: block;
-    margin: 10px;
-    margin-bottom: 20px;
-    margin-top: 4px;
-}
+
 .km-flat .km-popup.km-pane {
     border: none;
 }
 .km-flat .km-popup-arrow:after {
     border-color: white transparent;
 }
-#residence-help {
-    color: white;
-    text-align: center;
-    font-size: 12px;
-}
+
 #home-logo {
     width: 100%;
     padding-left: 20px;
@@ -296,7 +251,7 @@ h1 {
 .km-flat .km-button.home-icon {
     display: block;
     width: 50%;
-    height: 32%;
+    height: 33%;
     float: left;
     text-align: center;
     padding: 10px;
@@ -307,13 +262,11 @@ h1 {
     border-style: none;
     border-width: 0;
 }
-.home-icon img {
-    width: 45%;
-    margin-bottom: 10px;
-}
+
 .home-icon .title {
     color: white;
 }
+
 #logo-container {
     margin-bottom: 20px;
 }
@@ -357,10 +310,7 @@ h1 {
     -webkit-background-clip: border-box;
     background-position: center center;
 }
-#residence-select {
-    width: 100%;
-    font-size: 18px;
-}
+
 .text-center {
     text-align: center;
 }
@@ -370,26 +320,15 @@ h1 {
     background-color: transparent !important;
     color: #A84D97 !important; /*old color: #00AEC6*/
 }
-#laundry-machine-list img {
-    float: left;
-    height: 50px;
-    margin-right: 10px;
-}
-#laundry-machine-list .name {
-    margin-top: 6px;
-    font-size: 14px;
-    margin-bottom: 4px;
-}
-#laundry-machine-list .time-remaining {
-    margin: 0;
-}
-#washers-available,
-#dryers-available {
-    text-align: center;
-}
+
 #map {
     min-height: 200px;
 }
+
+#clusterMap {
+    min-height: 200px;
+}
+
 #map-drawer {
     color: white;
     background-color: black;
@@ -424,3 +363,21 @@ h1 {
 .marker-content img {
     width: 100%;
 }
+
+    .home-pc-count-text {
+        color: white;
+        margin-top: -17px;
+        padding-left: 6px;
+        font-size: 0.6em;
+
+
+    }
+
+        .cluster-pc-count-text {
+        color: white;
+        margin-top: -18px;
+        padding-left: 7px;
+        font-size: 0.6em;
+
+
+    }

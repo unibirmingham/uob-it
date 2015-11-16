@@ -107,8 +107,6 @@ app.registerInitialise(function () {
             });
         });
 
-
-
         var parseCampusCounts = Promise.method(function (pcCounts) {
             return new Promise(function (resolve, reject) {
             
@@ -310,7 +308,6 @@ app.registerInitialise(function () {
             });
         });
 
-
         //fetch campus name using campus id
         var getCampus = Promise.method(function (campusId) {
             return new Promise(function (resolve, reject) {
@@ -347,7 +344,6 @@ app.registerInitialise(function () {
             });
         });
 
-        //todo: finish this!
         var getBuilding = Promise.method(function (buildingId) {
             return new Promise(function (resolve, reject) {
 
@@ -397,6 +393,39 @@ app.registerInitialise(function () {
             });
         });
 
+
+        //Returns a style which colours a marker based upon value passed in
+        var clusterStyle = function (value) {
+            var style = 'marker-cluster marker-cluster-';
+            if (value < 10) {
+                style += 'small';
+            } else if (value < 100) {
+                style += 'medium';
+            } else {
+                style += 'large';
+            }
+
+            return style;
+        };
+
+        //Returns a colour to be applied to awesome font marker which is determined by value passed in
+        var markercolour = function (value) {
+
+            var colour;
+
+            if (value > 40) {
+                colour = "green";
+            } else if (value > 10) {
+                colour = "orange";
+            } else {
+                colour = "red";
+            }
+            return colour;
+        };
+
+
+
+
         //adds a key to the refresh array. On the next local storage request
         //for the specified key, a remote fetch will occur, the results
         //being pushed back to local storage
@@ -416,6 +445,8 @@ app.registerInitialise(function () {
             GetBuildingPcCounts: getBuildingPcCounts,
             GeneratePcCounts: generatePcCounts,
             GetBuilding: getBuilding,
+            CalculateClusterStyle: clusterStyle,
+            CalculateAvaiabilityColour: markercolour,
             RefreshData: forceRefresh,
             CacheKeys: cacheKeys
         }

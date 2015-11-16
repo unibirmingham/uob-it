@@ -31,9 +31,9 @@ models.home = kendo.observable({
 
         // $("#home-logo").one("load", function() {
         // After the logo has loaded, we'll have the height of the top div, so we can add a height to the lower div and use percentage heights on the icons
-        // 	$('#icons-container').height($('#home-container').outerHeight(true) - $('#logo-container').outerHeight(true));
+        // 	$('#icons-container').height($('#home-container').outerHeight(true) - $('#logo-container').outerHeight(true) - 150);
         //  }).each(function() {
-        // 	if(this.complete) $(this).load();
+         //	if(this.complete) $(this).load();
         // });
         //     var obj = { stuff: "dfsfdsdfsdfsdsf" }
         //   LocalStorageService.StoreOrUpdate("dfsfddddsdfs", obj);

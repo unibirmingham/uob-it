@@ -67,12 +67,14 @@
     <Content Include="js\views\pcAvailabilityFavoriteList.js" />
     <Content Include="js\views\pcClusters.js" />
     <Content Include="js\views\pcAvailabilityFullList.js" />
+    <Content Include="js\views\pcoketGuide.js" />
     <Content Include="js\views\settings.js" />
     <Content Include="js\views\home.js" />
     <Content Include="views\pcClusters.html" />
     <Content Include="views\pcClusters\pcClusters.html" />
     <Content Include="views\pcClusters\pcBuildings.html" />
     <Content Include="views\pcClusters\pcCampuses.html" />
+    <Content Include="views\pocketGuide\pocketGuideHome.html" />
     <Content Include="views\twitter.html" />
     <Content Include="kendo\js\jquery.min.js" />
     <Content Include="kendo\js\kendo.mobile.min.js" />
@@ -206,6 +208,7 @@
     <Folder Include="styles\images\home\" />
     <Folder Include="views\" />
     <Folder Include="Plugins\" />
+    <Folder Include="views\pocketGuide\" />
     <Folder Include="views\pcClusters\" />
   </ItemGroup>
   <Import Project="$(IceniumTargets)Build.targets" />

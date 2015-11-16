@@ -4,9 +4,9 @@
 
 var PocketGuideRepository;
 
-app.registerInitialise(function() {
+app.registerInitialise(function () {
 
-    PocketGuideRepository = (function() {
+    PocketGuideRepository = (function () {
 
         var cacheKeys = { AllGuide: "%POCKET_GUIDE_REPOSITORY_ALL" };
 
@@ -14,21 +14,15 @@ app.registerInitialise(function() {
 
         var forceRefreshKeys = {};
 
-
-        //fetched data from a remote source
-        var getDataRemote = Promise.method(function (url) {
+        var getPocketGuideAll = Promise.method(function () {
             return new Promise(function (resolve, reject) {
-                return $.getJSON(url, function (data) {
-                    resolve(data);
-                }).error(function (jqXhr, textStatus, errorThrown) {
-                    reject({ jqXhr, textStatus, errorThrown });
+                return RemoteServiceManager.FetchRemoteCache(pocketGuideUrl, cacheKeys.AllGuide).then(function (result) {
+                    return (result);
+                }).catch(function (error) {
+                    reject(error);
                 });
             });
         });
-
-        var getPocketGuideAll = function() {
-            
-        }
 
 
         //adds a key to the refresh array. On the next local storage request

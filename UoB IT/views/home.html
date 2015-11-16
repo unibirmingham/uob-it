@@ -1,14 +1,4 @@
-<style>
-    .home-pc-count-text {
-        color: white;
-        margin-top: -18px;
-        padding-left: 7px;
-        font-size: 0.6em;
-
-
-    }
-</style>
-<div id="home-view" data-role="view" data-title="Home" data-layout="home" data-model="models.home" data-show="models.home.onShow" data-stretch="true" data-reload="true">
+<div id="home-view" data-role="view" data-title="Home" data-layout="home" data-model="models.home" data-show="models.home.onShow" data-reload="true">
     <div id="home-container">
         <div id="logo-container">
             <img src="styles/images/home/UOB-logo.png" alt="The University of Birmingham" id="home-logo" />
@@ -17,46 +7,59 @@
         <div id="icons-container">
             <a href="views/pcClusters/pcCampuses.html" class="home-icon" data-role="button">
                 <span class="fa-stack fa-3x">
-                    <i class="fa fa-desktop fa-5x fa-stack-2x" style="color: white;"></i>
-                    <strong class="fa-stack-1x home-pc-count-text" id="homePcCount"></strong>
+                    <i class="fa fa-desktop fa-stack-2x" style="color: white;"></i>
+                    <strong class="fa-stack-2x home-pc-count-text" id="homePcCount"></strong>
                 </span>
-
                 <div class="title">
                     PC Availability
                 </div>
             </a>
             <a href="views/pcAvailabilityLeafletMap.html" class="home-icon" data-role="button">
-                <i class="fa fa-map-o fa-5x" style="color: white;"></i>
+                <span class="fa-stack fa-3x">
+                    <i class="fa fa-map-o fa-stack-2x " style="color: white;"></i>
+                </span>
                 <div class="title">
                     PCs Near Me
                 </div>
-            </a><a href="views/news.html" class="home-icon" data-role="button">
-                <i class="fa fa-newspaper-o fa-5x" style="color: white;"></i>
+            </a>
+            <a href="views/news.html" class="home-icon" data-role="button">
+                <span class="fa-stack fa-3x">
+                    <i class="fa fa-newspaper-o fa-stack-2x" style="color: white;"></i>
+                </span>
                 <div class="title">
                     News
                 </div>
             </a>
+
             <a href="views/pockedGuideHome.html" class="home-icon" data-role="button">
-                <i class="fa fa-leanpub fa-5x" style="color: white;"></i>
+                <span class="fa-stack fa-3x">
+                    <i class="fa fa-leanpub fa-stack-2x" style="color: white;"></i>
+                </span>
                 <div class="title">
                     Pocket Guide
                 </div>
             </a>
 
             <a href="views/twitter.html" class="home-icon" data-role="button">
-                <i class="fa fa-twitter-square fa-5x" style="color: white;"></i>
+                <span class="fa-stack fa-3x">
+                    <i class="fa fa-twitter-square fa-stack-2x" style="color: white;"></i>
+                </span>
                 <div class="title">
                     Twitter
                 </div>
             </a>
             <a href="views/facebook.html" class="home-icon" data-role="button">
-                <i class="fa fa-facebook-square fa-5x" style="color: white;"></i>
+                <span class="fa-stack fa-3x">
+                    <i class="fa fa-facebook-square fa-stack-2x" style="color: white;"></i>
+                </span>
                 <div class="title">
                     Facebook
                 </div>
             </a>
             <a href="views/settings.html" class="home-icon" data-role="button">
-                <i class="fa fa-cogs fa-5x" style="color: white;"></i>
+                <span class="fa-stack fa-3x">
+                    <i class="fa fa-cogs fa-stack-2x" style="color: white;"></i>
+                </span>
                 <div class="title">
                     Settings
                 </div>

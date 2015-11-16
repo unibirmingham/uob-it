@@ -43,35 +43,6 @@ var isFavorite = function (key) {
     return false;
 }
 
-//Returns a style which colours a marker based upon value passed in
-var clusterStyle = function (value) {
-    var style = 'marker-cluster marker-cluster-';
-    if (value < 10) {
-        style += 'small';
-    } else if (value < 100) {
-        style += 'medium';
-    } else {
-        style += 'large';
-    }
-
-    return style;
-};
-
-//Returns a colour to be applied to awesome font marker which is determined by value passed in
-var markercolour = function (value) {
-
-    var colour;
-
-    if (value > 40) {
-        colour = "green";
-    } else if (value > 10) {
-        colour = "orange";
-    } else {
-        colour = "red";
-    }
-    return colour;
-};
-
 var getDirections = function (originLng, originLat, destinationLng, destinationLat) {
 
     if (routeControl)
@@ -179,7 +150,7 @@ var populateMap = function () {
                         n += markers[i].options.NoOfPcsFree;
                     }
 
-                    return new L.DivIcon({ html: '<div><span>' + n + '</span></div>', className: clusterStyle(n), iconSize: new L.Point(40, 40) });
+                    return new L.DivIcon({ html: '<div><span>' + n + '</span></div>', className: PcClusterService.CalculateClusterStyle(n), iconSize: new L.Point(40, 40) });
 
                 }
 
@@ -209,7 +180,7 @@ var populateMap = function () {
 
                 markStore[arraySize] = new L.Marker(
                     item.CoordinatesArray,
-                    { icon: L.AwesomeMarkers.icon({ icon: '', prefix: 'fa', markerColor: markercolour(item.NoOfPcsFree), html: item.NoOfPcsFree }), NoOfPcsFree: item.NoOfPcsFree }).bindPopup(info);
+                    { icon: L.AwesomeMarkers.icon({ icon: '', prefix: 'fa', markerColor: PcClusterService.CalculateAvaiabilityColour(item.NoOfPcsFree), html: item.NoOfPcsFree }), NoOfPcsFree: item.NoOfPcsFree }).bindPopup(info);
 
             } while (arraySize--)
 

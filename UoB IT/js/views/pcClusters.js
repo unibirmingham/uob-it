@@ -157,8 +157,7 @@ models.pcClusters.Buildings = {
     }
 };
 
-
-models.pcClusters.Clusters = {
+models.pcClusters.Clusters = kendo.observable({
     selectedBuildingId: -1,
     title: "Clusters",
     onShow: function (e) {
@@ -185,16 +184,19 @@ models.pcClusters.Clusters = {
 
             PcClusterService.GetBuilding(buildingId).then(function (building) {
                 $("#clustersMainTitle").html("Clusters <span style='font-size: small;'>(" + building.BuildingName + ")</span>");
+
+                if (building && building.PolygonCoordinatesAsArrayList.length > 0) {
+                    var map = L.map('clusterMap', { tap: false }).setView(building.PolygonCoordinatesAsArrayList[0], 16);
+
+                    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+                }
+
             }).catch(function (error) {
 
                 $("#clustersMainTitle").html("Buildings");
             });
-
-            /*  PcClusterService.GetCampus(campusId).then(function (campus) {
-                  $("#buildingsMainTitle").append(" <span style='font-size: smaller;'>(" + campus.MapName + ")</span>");
-              }).catch(function (nameError) {
-                  console.log(nameError);
-              });*/
 
             //because we need a passed in param to fetch the correct building data, we need to have the datasource definition
             //in onShow, then we manually bind the result to the correct template control
@@ -206,8 +208,7 @@ models.pcClusters.Clusters = {
 
 
     }
-};
-
+});
 
 models.pcClusters.FavoriteList = {
     dataSource: {
@@ -228,31 +229,3 @@ models.pcClusters.FavoriteList = {
         }
     }
 };
-
-
-/*new kendo.data.DataSource({
-        transport: {
-            read: function (options) {
-                LocationService.GetLocation().then(function (location) {
-
-                    if (location && location.coords)
-                        location = [location.coords.latitude, location.coords.longitude];
-                    else
-                        location = LocationService.CoordCollection.CentralCampus;
-
-                    console.log(location);
-
-                }).then(function () {
-                    LocationService.GetAllPCs(location).then(function (pcData) {
-
-                        options.success(pcData);
-
-                    }).catch(function (pcFetchError) {
-                        options.error(pcFetchError);
-                    });
-                }).catch(function (locationError) {
-                    options.error(locationError);
-                });
-            }
-        }
-    })*/

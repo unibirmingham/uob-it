@@ -4,12 +4,18 @@
 </div>
 
 <script type="text/x-kendo-template" id="pcCampusesTemplate">
-
+    # var pcCountColour = PcClusterService.CalculateAvaiabilityColour(AvailablePCs) #
     <div onclick="javascript: app.mobile.navigate('/views/pcClusters/pcBuildings.html?campusId=' + #:ContentId#);">
-        <div style="float: left; margin-right: 10px;" id="AvailablePCs">#: AvailablePCs #</div><h2> #: MapName # </h2> 
+        <div style="float: left; margin-right: 20px;" id="AvailablePCs">
+            <span class="fa-stack fa-3x">
+                <i class="fa fa-desktop fa-4x fa-stack-2x" style="color: #= pcCountColour #"></i>
+                <strong class="fa-stack-1x home-pc-count-text" style="color: #= pcCountColour #"> #: AvailablePCs # </strong>
+            </span>
+        </div>
+
+        <h2> #: MapName # </h2>
         <div id="NumberOfBuildings" style="font-size: small;">#: AvailablePCs # PCs available across #: NumberOfBuildings #   # if(NumberOfBuildings == 1) { # building # } else { # buildings  # } #</div>
     </div>
-
 
 </script>
 
