@@ -45,6 +45,17 @@ var app = {
     },
     // Application Constructor
     initialize: function () {
+        
+
+        if (app.registerPreInitialiseCB) {
+            app.receivedEvent('registerPreInitialise');
+            var length = app.registerPreInitialiseCB.length - 1;
+     
+            do {
+                app.registerPreInitialiseCB[length]();
+            } while (length--);
+        }
+
         this.bindEvents();
         app.hasConnection = true;
     },
@@ -60,6 +71,13 @@ var app = {
     },
     registerPush: function () {
         app.receivedEvent('registeredPush');
+    },
+    registerPreInitialise: function (callback)
+    {
+        if (!app.registerPreInitialiseCB)
+            app.registerPreInitialiseCB = [];
+
+        app.registerPreInitialiseCB.push(callback);
     },
     registerInitialise: function (callback) {
         if (!app.registerInitialiseCB)
@@ -145,13 +163,11 @@ var app = {
     onDeviceOffline: function () {
         app.receivedEvent('onDeviceOffline');
         app.hasConnection = false;
-        console.log(app.hasConnection);
     },
     onDeviceOnline: function () {
         app.receivedEvent('onDeviceOnline');
         //  console.log("online!!");
         app.hasConnection = true;
-        console.log(app.hasConnection);
     },
     /* pushReceivedEvent: function(item) {
          app.receivedEvent('pushEventReceived');

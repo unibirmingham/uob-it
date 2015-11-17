@@ -15,8 +15,6 @@ app.registerInitialise(function () {
         //default location coords which point to the center of campus
         var coordCollection = { CentralCampus: [52.45049111433046, -1.9307774305343628] };
 
-        var forceRefreshKeys = {};
-
         //pc availibility service endpoint. perhaps push these things to config service?
         var pcsUrl = "http://www.birmingham.ac.uk/web_services/Clusters.svc/nearestpc";
 
@@ -63,19 +61,10 @@ app.registerInitialise(function () {
 
         });
 
-        //adds a key to the refresh array. On the next local storage request
-        //for the specified key, a remote fetch will occur, the results
-        //being pushed back to local storage
-        var forceRefresh = function (key) {
-
-            forceRefreshKeys[key] = true;
-        };
-
         //accessors
         return {
             GetAllPCs: getAllPCs,
             GetLocation: getPhoneLocation,
-            RefreshData: forceRefresh,
             CacheKeys: cacheKeys,
             CoordCollection: coordCollection
         }

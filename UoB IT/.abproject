@@ -26,7 +26,7 @@
   "iOSStatusBarStyle": "Default",
   "Framework": "Cordova",
   "WP8TileTitle": "",
-  "WP8Publisher": "",
+  "WP8Publisher": "Christopher Withers",
   "WP8Capabilities": [
     "ID_CAP_NETWORKING",
     "ID_CAP_WEBBROWSERCOMPONENT"
@@ -34,7 +34,7 @@
   "WP8Requirements": [],
   "WP8PublisherID": "{0b23c858-b662-49cb-8d81-7f930a355b55}",
   "WP8ProductID": "{8d5f2910-3887-4ebd-9750-b4d75d473017}",
-  "WPSdk": "8.0",
+  "WPSdk": "8.1",
   "WP8PackageIdentityName": "1234Telerik.UoBIT",
   "WP8WindowsPublisherName": "CN=Telerik",
   "WP8SupportedResolutions": [

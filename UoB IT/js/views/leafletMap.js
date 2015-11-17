@@ -10,7 +10,7 @@ var favorites;
 /*
  Initialisation
  */
-app.registerTimedWatcher({ every: 5, then: function () { PcClusterService.RefreshData(PcClusterService.CacheKeys.AllPCs); } });
+app.registerTimedWatcher({ every: 5, then: function () { RemoteServiceManager.RefreshData(PcClusterService.CacheKeys.AllPCs); } });
 
 //utility function to find a room object using roomId
 var fetchItemFromRoomId = function (roomId) {

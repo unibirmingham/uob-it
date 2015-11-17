@@ -83,7 +83,7 @@
 }
 
 .leaflet-routing-icon {
-    background-image: url('images/leaflet.routing.icons.png');
+    background-image: url('../styles/images/leaflet.routing.icons.png');
     -webkit-background-size: 240px 20px;
     -ms-background-size: 240px 20px;
     background-size: 240px 20px;
@@ -244,7 +244,7 @@
     display: block;
     width: 26px;
     height: 23px;
-    background-image: url('routing-icon.png');
+    background-image: url('../styles/images/routing-icon.png');
 }
 
 .leaflet-routing-container-hide .leaflet-routing-collapse-btn:after {

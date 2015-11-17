@@ -8,8 +8,6 @@ app.registerInitialise(function () {
 
     PcClusterService = (function () {
 
-        var forceRefreshKeys = {};
-
         var cacheKeys = {
             AllPCs: "%PC_CLUSTER_SERVICE_GET_ALL_PCS%",
             Campuses: "%PC_CLUSTER_SERVICE_CAMPUS%",
@@ -423,18 +421,6 @@ app.registerInitialise(function () {
             return colour;
         };
 
-
-
-
-        //adds a key to the refresh array. On the next local storage request
-        //for the specified key, a remote fetch will occur, the results
-        //being pushed back to local storage
-        var forceRefresh = function (key) {
-
-            forceRefreshKeys[key] = true;
-        };
-
-
         return {
             GetCampuses: getCampuses,
             GetCampusBuildings: getCampusBuildings,
@@ -447,7 +433,6 @@ app.registerInitialise(function () {
             GetBuilding: getBuilding,
             CalculateClusterStyle: clusterStyle,
             CalculateAvaiabilityColour: markercolour,
-            RefreshData: forceRefresh,
             CacheKeys: cacheKeys
         }
 

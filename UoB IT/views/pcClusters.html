@@ -1,4 +1,4 @@
-<div data-role="view" data-title="Campuses" data-layout="main" data-model="models.pcClusters" data-show="models.pcClusters.onShow">
+<div data-role="view" data-title="Campuses" data-layout="main" data-model="models.pcClusters" data-show="models.pcClusters.onShow"  data-reload="true">
     <h1 data-bind="html: title"></h1>
     <ul id="pcClusters" data-role="listview" data-source="models.pcClusters.Campuses.dataSource" data-template="pcClusterTemplate"></ul>
 </div>
@@ -7,7 +7,6 @@
 
     <div onclick="javascript: app.mobile.navigate('/views/settings.html');">
         <h4 >#: MapName #</h4>
-       
     </div>
 
 

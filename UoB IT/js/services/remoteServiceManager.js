@@ -5,7 +5,8 @@
 
 var RemoteServiceManager;
 
-app.registerInitialise(function () {
+app.registerPreInitialise(function () {
+
     RemoteServiceManager = (function () {
 
         var forceRefreshKeys = {};

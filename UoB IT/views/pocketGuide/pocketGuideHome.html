@@ -1,10 +1,10 @@
-<div data-role="view" data-title="Pocket Guide" data-layout="main" data-model="APP.models.guide">
-    <ul data-role="listview" data-style="inset" data-template="guideTemplate" data-bind="source: ds"></ul>
+<div data-role="view" data-title="Pocket Guide" data-layout="main" data-model="models.pocketGuide.Home" data-show="models.pocketGuide.Home.onShow" data-reload="true">
+    <h1 data-bind="html: title"></h1>
+    <ul id="pocketGuideHomeTemplate" data-role="listview" data-template="guideTemplate"></ul>
 </div>
 
-<script type="text/x-kendo-tmpl" id="guideTemplate">
-    #if (pageFunction === "page") {#
-    <span data-icon="${icon}"><a href="views/guide-page.html?id=${id}">${pageTitle}</a></span>
-    #}#
+<script type="text/x-kendo-template" id="guideTemplate">
+    <div onclick="javascript: app.mobile.navigate('views/pocketGuide/pocketGuidePage.html?contentId=' + #: id #);">
+        <i class="fa fa-question-circle fa-2x" style="float: left; margin-right: 10px;"></i><h2>#: PageTitle #</h2>
+    </div>
 </script>
-

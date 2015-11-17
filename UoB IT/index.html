@@ -18,20 +18,25 @@
     <script src="js/plugins/moment.min.js"></script>
     <script src="js/plugins/moment-duration-format.js"></script>
 
+    <script src="js/plugins/blurbird.js"></script>
+    <script src="js/services/test.js"></script>
+
+
     <script src="cordova.js"></script>
     <script src="kendo/js/jquery.min.js"></script>
     <script src="kendo/js/kendo.mobile.min.js"></script>
 
-    <script src="js/plugins/blurbird.js"></script>
+
 
     <script src="js/app.js"></script>
+    <script src="js/services/remoteServiceManager.js"></script>
    <!-- <script src="js/plugins/pouchdb-4.0.3.min.js"></script> -->
     <script src="js/services/localStorageServiceLocal.js"></script>
-    <script src="js/services/remoteServiceManager.js"></script>
     <script src="js/services/locationService.js"></script>
 
     <script src="js/services/PcClusterService.js"></script>
     <script src="js/services/userRepository.js"></script>
+    <script src="js/services/pocketGuideRepository.js"></script>
 </head>
 <body id="kendoUiMobileApp">
 
@@ -103,7 +108,7 @@
                 <a href="views/pcAvailabilityFullList.html"><i class="fa fa-star-o" style="margin-right: 7px;"></i>PC Favorite List</a>
             </li>
             <li>
-                <a href="views/pockedGuideHome.html"><i class="fa fa-leanpub" style="margin-right: 7px;"></i>Pocket Guide</a>
+                <a href="views/pocketGuide/pocketGuideHome.html"><i class="fa fa-leanpub" style="margin-right: 7px;"></i>Pocket Guide</a>
             </li>
             <li>
                 <a href="views/news.html"><i class="fa fa-newspaper-o" style="margin-right: 7px;"></i>News</a>
@@ -128,6 +133,7 @@
     <script src="js/views/leafletMap.js"></script>
     <script src="js/views/pcClusters.js"></script>
     <script src="js/views/pcAvailabilityFavoriteList.js"></script>
+    <script src="js/views/pocketGuide.js"></script>
     <!--Mapping includes-->
     <script src="js/plugins/leaflet.js"></script>
     <script src="js/plugins/lrm-valhalla.js"></script>

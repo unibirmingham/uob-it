@@ -16,7 +16,7 @@ Storage.prototype.getObject = function (key) {
 
 var LocalStorageService;
 
-app.registerInitialise(function () {
+app.registerPreInitialise(function () {
     //only for dev! 
    // localStorage.clear();
     LocalStorageService = (function () {
