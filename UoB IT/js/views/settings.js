@@ -4,6 +4,11 @@ app.registerInitialise(function () {
 });
 models.settings = kendo.observable({
     onShow: function () {
+        UserRepository.GetSettings().then(function (settings) {
+            console.log(settings);
+        }).catch(function (fetchSettingsError) {
+            console.log(fetchSettingsError);
+        });
        
         // setResidence(app.data.residence);
 

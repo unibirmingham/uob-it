@@ -1,0 +1,18 @@
+<div data-role="view" data-title="News" data-layout="main" data-show="models.socialMedia.News.onShow" data-model="models.socialMedia.News" data-reload="true">
+   <!-- <h1 data-bind="html:title"></h1> -->
+  <!--  <ul id="pcAvailabilityListFull" data-role="listview" data-source="models.socialMedia.News.dataSource" data-template="newsTemplate"></ul> -->
+    <h3>There are currently no news items</h3>
+</div>
+
+
+<script type="text/x-kendo-template" id="newsTemplate">
+
+    <div class="tweet-item">
+        <div class="tweet-text">
+            <span class="tweet-title">#:data.text#</span><br />
+            <span class="tweet_hours">#:data.created_at#</span>
+        </div>
+        <a class="tweet-link" onClick="window.open('http://www.twitter.com/#:data.user.screen_name#/status/#:data.id_str#', '_system')" data-role="detailbutton" data-style="detaildisclose"></a>
+    </div>
+
+</script>

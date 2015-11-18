@@ -19,6 +19,23 @@
                 }).error(function (jqXhr, textStatus, errorThrown) {
                     reject({ jqXhr, textStatus, errorThrown });
                 });
+              /*  console.log(url);
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    dataType: 'json',
+                    error: function () {
+                        reject('Unable to load feed, Incorrect path or invalid feed');
+                    },
+                    success: function (xml) {
+                        console.log(xml);
+                        values = xml.responseData.feed.entries;
+                        resolve(values);
+                    }
+                });*/
+
+
+
             });
         });
 

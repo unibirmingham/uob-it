@@ -7,7 +7,10 @@ var UserRepository;
 
 app.registerInitialise(function() {
     UserRepository = (function() {
-        var cacheKeys = { FavoriteRooms: "%USER_REPOSITORY_FAVORITE_ROOMS", Settings: "%USER_REPOSITORY_APP_SETTINGS" };
+        var cacheKeys = {
+            FavoriteRooms: "%USER_REPOSITORY_FAVORITE_ROOMS%",
+            Settings: "%USER_REPOSITORY_APP_SETTINGS%"
+        };
 
         var favorites = {}
 
@@ -63,6 +66,7 @@ app.registerInitialise(function() {
                 return LocalStorageService.GetItem(cacheKeys.Settings).then(function(item) {
                     resolve(item);
                 }).catch(function (error) {
+                    return LocalStorageService.StoreOrUpdate()
                     reject(error);
                 });
             });

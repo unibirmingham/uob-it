@@ -5,7 +5,7 @@
 
 //Add setObject / getObject to localStorage so we don't have to keep parsing and stringifying data for our json objects
 Storage.prototype.setObject = function (key, value) {
-        this.setItem(key, JSON.stringify(value));
+    this.setItem(key, JSON.stringify(value));
 }
 
 Storage.prototype.getObject = function (key) {
@@ -18,7 +18,7 @@ var LocalStorageService;
 
 app.registerPreInitialise(function () {
     //only for dev! 
-   // localStorage.clear();
+    // localStorage.clear();
     LocalStorageService = (function () {
 
         var getItem = Promise.method(function (cacheName) {
@@ -26,7 +26,7 @@ app.registerPreInitialise(function () {
             return new Promise(function (resolve, reject) {
                 if (typeof (Storage) !== "undefined") {
                     var item = localStorage.getObject(cacheName);
-                //    console.log(cacheName + " " + item);
+                    //    console.log(cacheName + " " + item);
                     if (item) {
                         resolve(item);
                     } else {
@@ -63,7 +63,7 @@ app.registerPreInitialise(function () {
                             } while (localStorageCounter--)
 
                             if (Object.keys(items).length > 0)
-                                resolve(items); 
+                                resolve(items);
                             else
                                 reject("No items could be found with a key containing '" + key + "'");
                         } else {
@@ -87,9 +87,9 @@ app.registerPreInitialise(function () {
             return new Promise(function (resolve, reject) {
                 if (typeof (Storage) !== "undefined") {
 
-                 //   console.log(item);
+                    //   console.log(item);
                     localStorage.setObject(cacheName, item);
-                  //  console.log(item);
+                    //  console.log(item);
                     return getItem(cacheName).then(function (storedItem) {
 
                         resolve(storedItem);
@@ -109,34 +109,46 @@ app.registerPreInitialise(function () {
         //we do an update on the item instead.
         var storeOrUpdate = Promise.method(function (cacheName, item, addition) {
 
-            if (item._id == undefined)
-                item._id = cacheName;
 
-            if (addition) {
-                item.addition = addition;
-            }
 
             return new Promise(function (resolve, reject) {
-                if (typeof (Storage) !== "undefined") {
 
-                    if (item == null) {
-                        reject("The item is null");
-                    }
-                    else {
 
-                        item.lastUpdated = moment();
+                if (!item) {
 
-                        return setItem(cacheName, item).then(function (storedItem) {
-                           
-                            resolve(storedItem);
-                        }).catch(function(error) {
-                            reject(error);
-                        });
-                        
-   
-                    }
+                    reject("No item was passed into the StoreOrUpdate function");
+
                 } else {
-                    reject("No localStorage support!");
+
+                    if (item._id == undefined)
+                        item._id = cacheName;
+
+                    if (addition) {
+                        item.addition = addition;
+                    }
+
+
+                    if (typeof (Storage) !== "undefined") {
+
+                        if (item == null) {
+                            reject("The item is null");
+                        }
+                        else {
+
+                            item.lastUpdated = moment();
+
+                            return setItem(cacheName, item).then(function (storedItem) {
+
+                                resolve(storedItem);
+                            }).catch(function (error) {
+                                reject(error);
+                            });
+
+
+                        }
+                    } else {
+                        reject("No localStorage support!");
+                    }
                 }
             });
         });
@@ -172,7 +184,7 @@ app.registerPreInitialise(function () {
                 }
             });
         });
-        
+
         var removeItem = Promise.method(function (item) {
             return new Promise(function (resolve, reject) {
                 if (!item._id) {
@@ -181,7 +193,7 @@ app.registerPreInitialise(function () {
                     if (typeof (Storage) !== "undefined") {
 
                         localStorage.removeItem(item._id);
-                       
+
                         if (localStorage.getObject(item._id))
                             resolve("Item was successfully removed from Cache.");
                         else
@@ -209,7 +221,7 @@ app.registerPreInitialise(function () {
 
                                 if (sKey != null && sKey.indexOf(key) > -1) {
                                     localStorage.removeItem(localStorage.getItem(sKey));
-                                //    console.log("removed " + key);
+                                    //    console.log("removed " + key);
                                 }
 
                             } while (localStorageCounter--)
@@ -218,7 +230,7 @@ app.registerPreInitialise(function () {
                         }
                         resolve("localStorage empty - so success");
                     }
-                    else{
+                    else {
                         reject("No localStorage support!");
                     }
                 }

@@ -1,0 +1,15 @@
+<div data-role="view" data-title="Facebook" data-layout="main" data-show="models.socialMedia.Facebook.onShow"  data-model="models.socialMedia.Facebook" data-reload="true">
+    <h1 data-bind="html:title"></h1>
+    <ul id="pcAvailabilityListFull" data-role="listview" data-source="models.socialMedia.Facebook.dataSource" data-template="postTemplate"></ul>
+</div>
+
+
+<script type="text/x-kendo-template" id="postTemplate">
+
+    <div>
+        <div class="tweet-text">
+            <span class="tweet-title">#=data.message#</span>
+        </div>
+    </div>
+
+</script>

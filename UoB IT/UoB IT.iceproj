@@ -54,6 +54,7 @@
     <Content Include="js\services\remoteServiceManager.js">
       <Publish>False</Publish>
     </Content>
+    <Content Include="js\services\socialMediaManager.js" />
     <Content Include="js\services\userRepository.js" />
     <Content Include="js\views\leafletMap.js" />
     <Content Include="js\plugins\leaflet-routing-machine.js" />
@@ -70,13 +71,16 @@
     <Content Include="js\views\pocketGuide.js" />
     <Content Include="js\views\settings.js" />
     <Content Include="js\views\home.js" />
+    <Content Include="js\views\socialMedia.js" />
+    <Content Include="views\socialMedia\news.html" />
     <Content Include="views\pcClusters.html" />
     <Content Include="views\pcClusters\pcClusters.html" />
     <Content Include="views\pcClusters\pcBuildings.html" />
     <Content Include="views\pcClusters\pcCampuses.html" />
     <Content Include="views\pocketGuide\pocketGuideHome.html" />
     <Content Include="views\pocketGuide\pocketGuidePage.html" />
-    <Content Include="views\twitter.html" />
+    <Content Include="views\socialMedia\facebook.html" />
+    <Content Include="views\socialMedia\twitter.html" />
     <Content Include="kendo\js\jquery.min.js" />
     <Content Include="kendo\js\kendo.mobile.min.js" />
     <Content Include="kendo\styles\images\back.png" />
@@ -208,6 +212,7 @@
     <Folder Include="styles\images\home\" />
     <Folder Include="views\" />
     <Folder Include="Plugins\" />
+    <Folder Include="views\socialMedia\" />
     <Folder Include="views\pocketGuide\" />
     <Folder Include="views\pcClusters\" />
   </ItemGroup>
