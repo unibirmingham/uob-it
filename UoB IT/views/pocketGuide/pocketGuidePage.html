@@ -1,9 +1,11 @@
-<div data-role="view" data-title="Pocket Guide" data-layout="back" data-model="models.pocketGuide.Pages" data-show="models.pocketGuide.Pages.onShow"  data-reload="true">
+<div data-role="view" data-title="Pocket Guide" data-layout="back" data-model="models.pocketGuide.Pages" data-show="models.pocketGuide.Pages.onShow" data-after-show="models.pocketGuide.Pages.afterShow" data-reload="true">
     <h1 data-bind="html: title" id="mainTitle"></h1>
 
 
     <div id="pocketGuidePageTemplate" data-role="listview" data-template="guide-page-template"></div>
 </div>
+
+
 
 <script type="text/x-kendo-template" id="guide-page-template">
 

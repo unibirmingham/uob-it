@@ -3,11 +3,11 @@
     Provides an interface for intergating with remote services - currently used for json services
 */
 
-var RemoteServiceManager;
+//var RemoteServiceManager;
 
-app.registerPreInitialise(function () {
+//app.registerPreInitialise(function () {
 
-    RemoteServiceManager = (function () {
+    var RemoteServiceManager = (function () {
 
         var forceRefreshKeys = {};
 
@@ -93,4 +93,4 @@ app.registerPreInitialise(function () {
         }
 
     })();
-});
+//});

@@ -111,14 +111,7 @@ var app = {
 
         app.hasConnection = true;
 
-        app.mobile = new kendo.mobile.Application(document.body, {
-            skin: 'flat',
-            // the application needs to know which view to load first
-            initial: initialView,
-            statusBarStyle: "black"
-        });
 
-        navigator.splashscreen.hide();
 
         if (app.registerInitialiseCB) {
             app.receivedEvent('registerInitialise');
@@ -131,12 +124,22 @@ var app = {
 
         if (app.registerPostInitialiseCB) {
             app.receivedEvent('registerPostInitialise');
-            var length = app.registerPostInitialiseCB.length - 1;
+            var lengthPost = app.registerPostInitialiseCB.length - 1;
 
             do {
-                app.registerPostInitialiseCB[length]();
-            } while (length--);
+                app.registerPostInitialiseCB[lengthPost]();
+            } while (lengthPost--);
         }
+
+
+        app.mobile = new kendo.mobile.Application(document.body, {
+            skin: 'flat',
+            // the application needs to know which view to load first
+            initial: initialView,
+            statusBarStyle: "black"
+        });
+
+        navigator.splashscreen.hide();
     },
     onViewChange: function(e) {
         app.receivedEvent('onViewChange');
