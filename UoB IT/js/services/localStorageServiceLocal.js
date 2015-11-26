@@ -103,16 +103,44 @@ app.registerPreInitialise(function () {
             });
         });
 
+        var localStorageSpace = Promise.method(function () {
+
+            return new Promise(function (resolve) {
+                var allStrings = '';
+                for (var key in window.localStorage) {
+                    if (window.localStorage.hasOwnProperty(key)) {
+                        allStrings += window.localStorage[key];
+                    }
+                }
+
+                var size =  allStrings ? 3 + (Math.round(((allStrings.length * 16) / (8 * 1024))* 100) / 100) + ' KB' : 'Empty (0 KB)';
+
+                resolve(size);
+            });
+
+        });
+
+        var clearLocalStorage = Promise.method(function () {
+
+            return new Promise(function (resolve, reject) {
+                if (typeof (Storage) !== "undefined") {
+                    localStorage.clear();
+
+                    resolve("localStorage successfully cleared");
+
+                } else {
+                    reject("No localStorage support!");
+                }
+            });
+        });
+
         //pouch db can either store or update, not overwrite. This function
         //takes an item and firsts checks to see if we can place it in 
         //local db. If not, and the returned failure is 409 (item exists),
         //we do an update on the item instead.
         var storeOrUpdate = Promise.method(function (cacheName, item, addition) {
 
-
-
             return new Promise(function (resolve, reject) {
-
 
                 if (!item) {
 
@@ -255,7 +283,9 @@ app.registerPreInitialise(function () {
             StoreOrUpdate: storeOrUpdate,
             RemoveItem: removeItem,
             RemoveItemsByKey: removeItemsByKey,
-            RecoverItem: recoverItem
+            RecoverItem: recoverItem,
+            Clear: clearLocalStorage,
+            LocalStorageSpace: localStorageSpace
         }
 
     })();

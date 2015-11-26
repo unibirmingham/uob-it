@@ -66,8 +66,16 @@ app.registerInitialise(function() {
                 return LocalStorageService.GetItem(cacheKeys.Settings).then(function(item) {
                     resolve(item);
                 }).catch(function (error) {
-                    return LocalStorageService.StoreOrUpdate()
-                    reject(error);
+                    LocalFileManager.GetFile(LocalFileManager.Keys.Settings).then(function (settings) {
+                        return LocalStorageService.StoreOrUpdate(settings, LocalFileManager.Keys.Settings).then(function (savedSettings) {
+                            resolve(savedSettings);
+                        }).catch(function (saveSettingsError) {
+                            reject(saveSettingsError);
+                        });
+                    }).catch(function(getSettingsError)
+                    {
+                        reject(getSettingsError);
+                    })
                 });
             });
         });

@@ -4,24 +4,36 @@ app.registerInitialise(function () {
 });
 models.settings = kendo.observable({
     onShow: function () {
+
+        //populate setting fields
         UserRepository.GetSettings().then(function (settings) {
             console.log(settings);
+            options.success(settings);
+
         }).catch(function (fetchSettingsError) {
             console.log(fetchSettingsError);
+            options.error(fetchSettingsError);
+
         });
-       
-        // setResidence(app.data.residence);
 
-        // $("#home-logo").one("load", function() {
-        // After the logo has loaded, we'll have the height of the top div, so we can add a height to the lower div and use percentage heights on the icons
-        // 	$('#icons-container').height($('#home-container').outerHeight(true) - $('#logo-container').outerHeight(true));
-        //  }).each(function() {
-        // 	if(this.complete) $(this).load();
-        // 
-    //    var item = LocalStorageService.GetItem("dfsfddddsdfs");
+        //get localstorage size
+        LocalStorageService.LocalStorageSpace().then(function (spaceAvailable) {
+            $("#localCacheSize").html(spaceAvailable);
+        }).catch(function (spaceAvailableFetchError) {
+            console.log(spaceAvailableFetchError);
+        });
 
-      //  var pcs = LocationService.GetAllPCs();
-       // console.log(pcs);
-    },
-    title: "asdsad"
+        //hook up clear cache events
+        $("#clearCacheButton").click(function () {
+            LocalStorageService.Clear().then(function () {
+                LocalStorageService.LocalStorageSpace().then(function (spaceAvailable) {
+                    $("#localCacheSize").html(spaceAvailable);
+                }).catch(function (spaceAvailableFetchError) {
+                    console.log(spaceAvailableFetchError);
+                });
+            }).catch(function (clearCacheError) {
+                console.log(clearCacheError);
+            });
+        });
+    }
 });

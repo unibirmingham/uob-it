@@ -1,6 +1,4 @@
-//Default app settings
-
-{
+[{
   "MapRefreshMinutes": 5,
   "RefreshClusterInfo":  5
-}
+}]

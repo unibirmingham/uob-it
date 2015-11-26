@@ -438,3 +438,14 @@ app.registerInitialise(function () {
 
     })();
 });
+
+app.registerPostInitialise(function () {
+
+    //    app.registerTimedWatcher({ every: 5, then: function () { RemoteServiceManager.RefreshData(PcClusterService.CacheKeys.AllPCs); } });
+
+    UserRepository.GetSettings().then(function (settings) {
+        console.log(settings);
+    }).catch(function (fetchSettingsError) {
+        console.log(fetchSettingsError);
+    });
+});
