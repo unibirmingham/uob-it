@@ -6,12 +6,10 @@ app.registerPostInitialise(function() {
 
 models.home = kendo.observable({
     onShow: function () {
-        console.log(app.isOnline());
+      
         if (app.isOnline()) {
             PcClusterService.GetCampusPcCounts().then(function(counts) {
                 if (counts && Object.keys(counts.Clusters).length > 0) {
-                    console.log(counts);
-
                     var totalPcsAvailable = 0;
 
                     for (var key in counts.Clusters) {
@@ -24,7 +22,7 @@ models.home = kendo.observable({
                     $("#homePcCount").html(totalPcsAvailable);
                 }
             }).catch(function(error) {
-
+                console.log(error);
             });
         }
         // setResidence(app.data.residence);

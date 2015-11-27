@@ -5,8 +5,8 @@
 
 var UserRepository;
 
-app.registerInitialise(function() {
-    UserRepository = (function() {
+app.registerInitialise(function () {
+    UserRepository = (function () {
         var cacheKeys = {
             FavoriteRooms: "%USER_REPOSITORY_FAVORITE_ROOMS%",
             Settings: "%USER_REPOSITORY_APP_SETTINGS%"
@@ -31,12 +31,12 @@ app.registerInitialise(function() {
 
             var key = item.BuildingId + "_" + item.RoomId;
             return new Promise(function (resolve, reject) {
-                    if (delete favorites[key]) {
-                            resolve(saveFavorites());
-                    } else {
-                        reject("could not delete item '" + key + "' from favorites.");
-                    }
-                });
+                if (delete favorites[key]) {
+                    resolve(saveFavorites());
+                } else {
+                    reject("could not delete item '" + key + "' from favorites.");
+                }
+            });
         });
 
         var addFavorite = Promise.method(function (item) {
@@ -44,43 +44,37 @@ app.registerInitialise(function() {
 
             favorites[key] = item;
 
-            return new Promise(function(resolve) {
+            return new Promise(function (resolve) {
                 resolve(saveFavorites());
             });
 
         });
 
         var getAllFavorites = Promise.method(function () {
-            return new Promise(function(resolve, reject) {
+            return new Promise(function (resolve, reject) {
                 return LocalStorageService.GetItem(cacheKeys.FavoriteRooms).then(function (items) {
                     favorites = items;
                     resolve(items);
-                }).catch(function(error) {
-                        reject(error);    
-                });
-            });
-        });
-
-        var getSettings = Promise.method(function () {
-            return new Promise(function(resolve, reject) {
-                return LocalStorageService.GetItem(cacheKeys.Settings).then(function(item) {
-                    resolve(item);
                 }).catch(function (error) {
-                    LocalFileManager.GetFile(LocalFileManager.Keys.Settings).then(function (settings) {
-                        return LocalStorageService.StoreOrUpdate(settings, LocalFileManager.Keys.Settings).then(function (savedSettings) {
-                            resolve(savedSettings);
-                        }).catch(function (saveSettingsError) {
-                            reject(saveSettingsError);
-                        });
-                    }).catch(function(getSettingsError)
-                    {
-                        reject(getSettingsError);
-                    })
+                    reject(error);
                 });
             });
         });
 
-        var saveSettings = Promise.method(function(settings) {
+        // fetching a local file using .getJson might not work in all browsers due to security
+        // if it fails on any mobile, use http://requirejs.org/ to pull the file in, see here:
+        // http://stackoverflow.com/questions/7346563/loading-local-json-file
+        var getSettings = Promise.method(function () {
+            return new Promise(function (resolve, reject) {
+                return RemoteServiceManager.FetchRemoteCache(LocalFileManager.Files.Settings, cacheKeys.Settings).then(function (result) {
+                    resolve(result.data);
+                }).catch(function (error) {
+                    reject(error);
+                });
+            });
+        });
+
+        var saveSettings = Promise.method(function (settings) {
             return LocalStorageService.StoreOrUpdate(cacheKeys.Settings, settings).then(function (result) {
                 resolve(result);
             }).catch(function (error) {

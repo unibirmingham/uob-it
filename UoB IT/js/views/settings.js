@@ -8,12 +8,8 @@ models.settings = kendo.observable({
         //populate setting fields
         UserRepository.GetSettings().then(function (settings) {
             console.log(settings);
-            options.success(settings);
-
         }).catch(function (fetchSettingsError) {
             console.log(fetchSettingsError);
-            options.error(fetchSettingsError);
-
         });
 
         //get localstorage size
