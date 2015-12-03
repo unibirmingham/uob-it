@@ -75,11 +75,14 @@ app.registerInitialise(function () {
         });
 
         var saveSettings = Promise.method(function (settings) {
-            return LocalStorageService.StoreOrUpdate(cacheKeys.Settings, settings).then(function (result) {
-                resolve(result);
-            }).catch(function (error) {
-                reject(error);
+            return new Promise(function (resolve, reject) {
+                return LocalStorageService.StoreOrUpdate(cacheKeys.Settings, settings).then(function (result) {
+                    resolve(result);
+                }).catch(function (error) {
+                    reject(error);
+                });
             });
+
         });
 
         return {

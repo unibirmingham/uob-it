@@ -7,7 +7,16 @@ models.settings = kendo.observable({
 
         //populate setting fields
         UserRepository.GetSettings().then(function (settings) {
-            console.log(settings);
+
+            if (settings && settings.length > 0)
+            {
+                console.log(settings[0]);
+
+                $("#mapRefreshMinutes").val(settings[0].MapRefreshMinutes);
+                $("#refreshClusterInfo").val(settings[0].RefreshClusterInfo);
+            }
+
+            
         }).catch(function (fetchSettingsError) {
             console.log(fetchSettingsError);
         });
@@ -31,5 +40,30 @@ models.settings = kendo.observable({
                 console.log(clearCacheError);
             });
         });
+    },
+    save: function () {
+        UserRepository.GetSettings().then(function (settings) {
+            console.log(settings);
+            if (settings && settings.length > 0) {
+                console.log(settings[0]);
+
+                //what about validation? int only? not empty?
+                settings[0].MapRefreshMinutes = $("#mapRefreshMinutes").val();
+                settings[0].RefreshClusterInfo = $("#refreshClusterInfo").val();
+
+
+                UserRepository.SaveSettings(settings).then(function (result) {
+                    console.log(result);
+                }).catch(function (saveSettingsError) {
+                    console.log(saveSettingsError);
+                });
+
+
+            }
+        }).catch(function (fetchSettingsError) {
+            console.log(fetchSettingsError);
+        });
+
+
     }
 });

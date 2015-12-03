@@ -1,8 +1,15 @@
-<div data-role="view" data-title="Settings" data-layout="main" data-model="models.settings" data-bind="source: dataSource"  data-show="models.settings.onShow">
+<div data-role="view" data-title="Settings" data-layout="main" data-model="models.settings" data-bind="source: dataSource" data-show="models.settings.onShow">
     <div style="margin-top: 50px; margin-left: 10px; margin-right: 10px;">
-        <label>Update Pc Availability (minutes)</label> <input type="text" data-bind="html: MapRefreshMinutes" /><span></span>
-        <label>Local Cache Size</label> <span id="localCacheSize"></span>
-        <button style="margin-top: 20px; float: right;" onclick="javascript: console.log(models.settings.dataSource);">Save</button>
-        <button id ="clearCacheButton" style="margin-top: 20px; float: right;">Clear Cache</button>
+
+        <div style="margin-top: 20px;">
+            <label>Update Pc Availability (minutes)</label> <input type="text" id="mapRefreshMinutes" />
+        </div>
+        <div style="margin-top: 20px;">
+            <label>Update Cluster Count (minutes)</label> <input type="text" id="refreshClusterInfo" />
+        </div>
+        <div style="margin-top: 20px;">
+            <label>Local Cache Size</label> <span id="localCacheSize"></span> <a href="#" id="clearCacheButton">Clear Cache</a>
+        </div>
+        <button style="margin-top: 20px; float: right; margin-right: 20px;" onclick="javascript: models.settings.save();">Save</button>
     </div>
 </div>
