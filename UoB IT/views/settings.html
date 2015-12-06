@@ -2,10 +2,10 @@
     <div style="margin-top: 50px; margin-left: 10px; margin-right: 10px;">
 
         <div style="margin-top: 20px;">
-            <label>Update Pc Availability (minutes)</label> <input type="text" id="mapRefreshMinutes" />
+            <label>Update Pc Availability (minutes)</label> <input type="number" min="0" max="120" id="mapRefreshMinutes" />
         </div>
         <div style="margin-top: 20px;">
-            <label>Update Cluster Count (minutes)</label> <input type="text" id="refreshClusterInfo" />
+            <label>Update Cluster Count (minutes)</label> <input type="number" min="0" max="120" id="refreshClusterInfo" />
         </div>
         <div style="margin-top: 20px;">
             <label>Local Cache Size</label> <span id="localCacheSize"></span> <a href="#" id="clearCacheButton">Clear Cache</a>

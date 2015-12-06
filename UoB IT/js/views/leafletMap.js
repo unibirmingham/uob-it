@@ -243,7 +243,7 @@ models.leafletMap.functions = {
                         info += "<div><i id='" + key + "' class='fa fa-star-o fa-2x'></i></div>";
                     }*/
 
-                    info += "<div><button onclick='javascript:getDirections( " + models.leafletMap.location[0] + ", " + models.leafletMap.location[1] + ", " + item.CoordinatesArray[0] + ", " + item.CoordinatesArray[1] + ");'>Directions</button></div>";
+                 //   info += "<div><button onclick='javascript:getDirections( " + models.leafletMap.location[0] + ", " + models.leafletMap.location[1] + ", " + item.CoordinatesArray[0] + ", " + item.CoordinatesArray[1] + ");'>Directions</button></div>";
 
 
                     markStore[arraySize] = new L.Marker(

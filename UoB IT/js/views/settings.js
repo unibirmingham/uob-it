@@ -12,6 +12,24 @@ models.settings = kendo.observable({
             {
                 console.log(settings[0]);
 
+                $("#mapRefreshMinutes").keypress(function (e) {
+                    //if the letter is not digit then display error and don't type anything
+                    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+
+                        return false;
+                    }
+                    return true;
+                });
+
+                $("#refreshClusterInfo").keypress(function (e) {
+                    //if the letter is not digit then display error and don't type anything
+                    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+
+                        return false;
+                    }
+                    return true;
+                });
+
                 $("#mapRefreshMinutes").val(settings[0].MapRefreshMinutes);
                 $("#refreshClusterInfo").val(settings[0].RefreshClusterInfo);
             }
@@ -47,11 +65,19 @@ models.settings = kendo.observable({
             if (settings && settings.length > 0) {
                 console.log(settings[0]);
 
+                var regex = new RegExp("^[0-9]+$");
+
+
+                var mapRefresh = $("#mapRefreshMinutes").val();
+                var clusterRefresh = $("#refreshClusterInfo").val();
                 //what about validation? int only? not empty?
-                settings[0].MapRefreshMinutes = $("#mapRefreshMinutes").val();
-                settings[0].RefreshClusterInfo = $("#refreshClusterInfo").val();
 
+                console.log(regex.test(mapRefresh));
+                
+                settings[0].MapRefreshMinutes = regex.test(mapRefresh) ? mapRefresh : 5;
+                settings[0].RefreshClusterInfo = regex.test(clusterRefresh) ? clusterRefresh : 5;
 
+                console.log(settings);
                 UserRepository.SaveSettings(settings).then(function (result) {
                     console.log(result);
                 }).catch(function (saveSettingsError) {

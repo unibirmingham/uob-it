@@ -444,7 +444,12 @@ app.registerPostInitialise(function () {
     //    app.registerTimedWatcher({ every: 5, then: function () { RemoteServiceManager.RefreshData(PcClusterService.CacheKeys.AllPCs); } });
 
     UserRepository.GetSettings().then(function (settings) {
-        console.log(settings);
+
+        if (settings && settings.length > 0) {
+            app.registerTimedWatcher({ every: settings[0].MapRefreshMinutes, then: function () { RemoteServiceManager.RefreshData(PcClusterService.CacheKeys.AllPCs); } });
+            app.registerTimedWatcher({ every: settings[0].RefreshClusterInfo, then: function () { RemoteServiceManager.RefreshData(PcClusterService.CacheKeys.PcCounts); } });
+        }
+
     }).catch(function (fetchSettingsError) {
         console.log(fetchSettingsError);
     });
