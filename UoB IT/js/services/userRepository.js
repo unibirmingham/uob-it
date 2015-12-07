@@ -68,7 +68,7 @@ app.registerInitialise(function () {
             return new Promise(function (resolve, reject) {
                 return RemoteServiceManager.FetchRemoteCache(LocalFileManager.Files.Settings, cacheKeys.Settings).then(function (result) {
                     resolve(result);
-                    console.log(result);
+                 //   console.log(result);
                 }).catch(function (error) {
                     reject(error);
                 });

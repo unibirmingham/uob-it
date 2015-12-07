@@ -190,14 +190,14 @@ models.leafletMap.functions = {
     //We initilaise first to try and grab favorites, then when generate map
     initialiseMap: function () {
 
-        UserRepository.GetAllFavorites().then(function (results) {
-            models.leafletMap.favorites = results;
-            models.leafletMap.functions.populateMap();
-        }).catch(function (error) {
-            console.log(error);
+      //  UserRepository.GetAllFavorites().then(function (results) {
+        //    models.leafletMap.favorites = results;
+          //  models.leafletMap.functions.populateMap();
+       // }).catch(function (error) {
+        //    console.log(error);
             models.leafletMap.functions.populateMap();
 
-        });
+       // });
     },
 
     populateMap: function () {

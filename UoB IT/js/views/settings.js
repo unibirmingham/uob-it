@@ -10,10 +10,9 @@ models.settings = kendo.observable({
 
             if (settings && settings.length > 0)
             {
-                console.log(settings[0]);
 
+                //allow only itns to be placed into the following text boxes
                 $("#mapRefreshMinutes").keypress(function (e) {
-                    //if the letter is not digit then display error and don't type anything
                     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
 
                         return false;
@@ -22,7 +21,6 @@ models.settings = kendo.observable({
                 });
 
                 $("#refreshClusterInfo").keypress(function (e) {
-                    //if the letter is not digit then display error and don't type anything
                     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
 
                         return false;
@@ -30,6 +28,7 @@ models.settings = kendo.observable({
                     return true;
                 });
 
+                //populate text boxes with values
                 $("#mapRefreshMinutes").val(settings[0].MapRefreshMinutes);
                 $("#refreshClusterInfo").val(settings[0].RefreshClusterInfo);
             }
@@ -63,23 +62,26 @@ models.settings = kendo.observable({
         UserRepository.GetSettings().then(function (settings) {
             console.log(settings);
             if (settings && settings.length > 0) {
-                console.log(settings[0]);
 
+                //regex to check that strings only contain values
                 var regex = new RegExp("^[0-9]+$");
 
 
                 var mapRefresh = $("#mapRefreshMinutes").val();
                 var clusterRefresh = $("#refreshClusterInfo").val();
-                //what about validation? int only? not empty?
-
-                console.log(regex.test(mapRefresh));
                 
                 settings[0].MapRefreshMinutes = regex.test(mapRefresh) ? mapRefresh : 5;
                 settings[0].RefreshClusterInfo = regex.test(clusterRefresh) ? clusterRefresh : 5;
 
-                console.log(settings);
+               
                 UserRepository.SaveSettings(settings).then(function (result) {
-                    console.log(result);
+                    //if settings are successfully saved, push updated timedWatcher to app TimeWatcher store
+                    if(result && result.length > 0)
+                    {
+                        app.registerTimedWatcher({ every: result[0].MapRefreshMinutes, then: function () { RemoteServiceManager.RefreshData(PcClusterService.CacheKeys.AllPCs); } });
+                        app.registerTimedWatcher({ every: result[0].RefreshClusterInfo, then: function () { RemoteServiceManager.RefreshData(PcClusterService.CacheKeys.PcCounts); } });
+                    }
+
                 }).catch(function (saveSettingsError) {
                     console.log(saveSettingsError);
                 });

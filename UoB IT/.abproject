@@ -2,12 +2,12 @@
   "ProjectName": "UoB_IT",
   "ProjectGuid": "89a5619d-cb7e-4e8b-9ed7-c2774c7314d2",
   "projectVersion": 1,
-  "AppIdentifier": "com.telerik.UoBIT",
+  "AppIdentifier": "uk.ac.birmingham.m.UoBIT",
   "DisplayName": "UoB_IT",
   "Author": "",
   "Description": "UoB_IT",
-  "BundleVersion": "1.0",
-  "AndroidVersionCode": "1",
+  "BundleVersion": "1.01",
+  "AndroidVersionCode": "3",
   "iOSDeviceFamily": [
     "1",
     "2"
