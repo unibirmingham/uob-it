@@ -1,9 +1,15 @@
+/// <reference path="../plugins/requireJsPlugins/json.js" />
+/// <reference path="../plugins/requireJsPlugins/json.js" />
 /*
     User repository.
     All user based operationsoperations should go here e.g. favprites, settings etc
  */
 
 var UserRepository;
+
+
+
+
 
 app.registerInitialise(function () {
     UserRepository = (function () {
@@ -66,9 +72,16 @@ app.registerInitialise(function () {
         // http://stackoverflow.com/questions/7346563/loading-local-json-file
         var getSettings = Promise.method(function () {
             return new Promise(function (resolve, reject) {
-                return RemoteServiceManager.FetchRemoteCache(LocalFileManager.Files.Settings, cacheKeys.Settings).then(function (result) {
+
+
+
+
+
+
+                return LocalFileManager.GetFileCache(LocalFileManager.Files.Settings, cacheKeys.Settings).then(function (result) {
+
                     resolve(result);
-                 //   console.log(result);
+
                 }).catch(function (error) {
                     reject(error);
                 });

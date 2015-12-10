@@ -1,14 +1,11 @@
 'use strict';
-app.registerInitialise(function () {
-
-});
 models.settings = kendo.observable({
     onShow: function () {
-
+      
         //populate setting fields
         UserRepository.GetSettings().then(function (settings) {
 
-            if (settings && settings.length > 0)
+            if (settings && settings.data.length > 0)
             {
 
                 //allow only itns to be placed into the following text boxes
@@ -29,12 +26,14 @@ models.settings = kendo.observable({
                 });
 
                 //populate text boxes with values
-                $("#mapRefreshMinutes").val(settings[0].MapRefreshMinutes);
-                $("#refreshClusterInfo").val(settings[0].RefreshClusterInfo);
+                $("#mapRefreshMinutes").val(settings.data[0].MapRefreshMinutes);
+                $("#refreshClusterInfo").val(settings.data[0].RefreshClusterInfo);
             }
 
             
         }).catch(function (fetchSettingsError) {
+
+            console.log("dsfsdfd");
             console.log(fetchSettingsError);
         });
 
@@ -60,8 +59,8 @@ models.settings = kendo.observable({
     },
     save: function () {
         UserRepository.GetSettings().then(function (settings) {
-            console.log(settings);
-            if (settings && settings.length > 0) {
+          
+            if (settings && settings.data.length > 0) {
 
                 //regex to check that strings only contain values
                 var regex = new RegExp("^[0-9]+$");
@@ -70,11 +69,12 @@ models.settings = kendo.observable({
                 var mapRefresh = $("#mapRefreshMinutes").val();
                 var clusterRefresh = $("#refreshClusterInfo").val();
                 
-                settings[0].MapRefreshMinutes = regex.test(mapRefresh) ? mapRefresh : 5;
-                settings[0].RefreshClusterInfo = regex.test(clusterRefresh) ? clusterRefresh : 5;
+                settings.data[0].MapRefreshMinutes = regex.test(mapRefresh) ? mapRefresh : 5;
+                settings.data[0].RefreshClusterInfo = regex.test(clusterRefresh) ? clusterRefresh : 5;
 
                
                 UserRepository.SaveSettings(settings).then(function (result) {
+               
                     //if settings are successfully saved, push updated timedWatcher to app TimeWatcher store
                     if(result && result.length > 0)
                     {

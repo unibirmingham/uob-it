@@ -15,14 +15,16 @@
  
     <link href="styles/index.css" rel="stylesheet" />
 
+
     <script src="js/plugins/moment.min.js"></script>
     <script src="js/plugins/moment-duration-format.js"></script>
-
+  
     <script src="js/plugins/blurbird.js"></script>
 
     <script src="cordova.js"></script>
     <script src="kendo/js/jquery.min.js"></script>
     <script src="kendo/js/kendo.mobile.min.js"></script>
+  
 
     <script src="js/services/remoteServiceManager.js"></script>
    
@@ -37,6 +39,8 @@
     <script src="js/services/userRepository.js"></script>
     <script src="js/services/pocketGuideRepository.js"></script>
     <script src="js/services/socialMediaManager.js"></script>
+
+
    
 </head>
 <body id="kendoUiMobileApp">
@@ -144,6 +148,20 @@
     <script src="js/plugins/leaflet.markercluster-src.js"></script>
     <script src="js/plugins/leaflet-routing-machine.js"></script>
 
+
+
+    <script src="js/plugins/require.js"></script>
+
+
+    <script>
+        require.config({
+            paths: {
+                //create alias to plugins (not needed if plugins are on the baseUrl)
+                json: 'js/plugins/requireJsPlugins/json',
+                text: 'js/plugins/requireJsPlugins/text'
+            }
+        });
+    </script>
 </body>
 </html>
 

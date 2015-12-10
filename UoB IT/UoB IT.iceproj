@@ -29,6 +29,7 @@
     <Content Include="cordova.ios.js" />
     <Content Include="cordova.wp8.js" />
     <Content Include="data\PocketGuide.json" />
+    <Content Include="data\Settings.json.js" />
     <Content Include="data\Settings.json" />
     <Content Include="data\PcClusters.json" />
     <Content Include="fonts\fontawesome-webfont.eot" />
@@ -43,6 +44,9 @@
     <Content Include="js\plugins\moment-duration-format.js" />
     <Content Include="js\plugins\moment.min.js" />
     <Content Include="js\plugins\pouchdb.localstorage.min.js" />
+    <Content Include="js\plugins\require.js" />
+    <Content Include="js\plugins\requireJsPlugins\json.js" />
+    <Content Include="js\plugins\requireJsPlugins\text.js" />
     <Content Include="js\services\localFileManager.js" />
     <Content Include="js\services\localStorageServiceLocal.js" />
     <Content Include="js\services\locationRepository.js">
@@ -199,6 +203,7 @@
     <Folder Include="img\" />
     <Folder Include="js\" />
     <Folder Include="js\core\" />
+    <Folder Include="js\plugins\requireJsPlugins\" />
     <Folder Include="js\views\" />
     <Folder Include="js\services\" />
     <Folder Include="js\plugins\" />
